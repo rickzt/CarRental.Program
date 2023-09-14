@@ -1,0 +1,13 @@
+﻿body {
+}
+
+.container-small{
+    max-width: 50%;
+}
+.text {
+    text-decoration: none;
+}
+
+    .text:hover {
+        background-color: rgba(243, 243, 243, 0.5);
+    }
