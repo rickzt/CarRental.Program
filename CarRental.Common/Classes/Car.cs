@@ -11,8 +11,8 @@ namespace CarRental.Common.Classes
         public int odometer { get; set; }
         public int costDay { get; set; }
         public double costKm { get; set; }
-        public VehicleTypes vehicleTypes;
-		public VehicleStatuses vehicleStatuses;
+        public VehicleTypes vehicleTypes { get; set; }
+		public VehicleStatuses vehicleStatuses { get; set; }
 
 		public Car (string regNr, string maker, int odometer, double costKm, VehicleTypes vechicleTypes, int costDay, VehicleStatuses vehicleStatuses)
 		{

@@ -1,12 +1,13 @@
 ﻿using CarRental.Common.Enums;
+using CarRental.Common.Interfaces;
 
 namespace CarRental.Common.Classes
 {
-	public class Customer
+	public class Customer : IPerson
 	{
-		public int ssn;
-		public string lastName;
-		public string firstName;
+		public string firstName { get; set; }
+		public string lastName { get; set; }
+		public int ssn { get; set; }
 
 		public Customer(int ssn, string lastName, string firstName)
 		{

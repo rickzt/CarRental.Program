@@ -8,6 +8,9 @@ using System.Xml.Linq;
 using CarRental.Common.Enums;
 using CarRental.Common.Interfaces;
 using CarRental.Data.Interfaces;
+using CarRental.Data.Classes;
+using CarRental.Common.Classes;
+using System.Collections;
 
 namespace CarRental.Business.Classes
 {
@@ -22,18 +25,22 @@ namespace CarRental.Business.Classes
 
         // Klasserna ska innehålla logik för att beräkna kostnader, kilometer m.m
 
-        /*public IEnumerable<Customer> GetCustomers() // Using customer classes? ctrl + .
-        {
-            // return db.customers?
-        }*/
+        public IEnumerable<Customer> GetCustomers()
+		{
+            var customerList = _db.GetPersons().Where(x => x is Customer).Cast<Customer>().ToList();
+			return customerList;
+			
+
+
+		}
         public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default)
         {
             return _db.GetVehicles(status);
         }
-        /*public IEnumerable<IBooking> GetBookings()
+        public IEnumerable<IBooking> GetBookings()
         {
-
-        }*/
+            return _db.GetBookings();
+        }
 
     }
 }

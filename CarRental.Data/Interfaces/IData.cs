@@ -7,9 +7,9 @@ namespace CarRental.Data.Interfaces;
 
 public interface IData
 {
-	//IEnumerable<IPerson> GetPersons(); // Hämta personer
+	IEnumerable<IPerson> GetPersons(); // Hämta personer
 	IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default); // Ta reda på om bilen är bokad eller inte
-	//IEnumerable<IBooking> GetBookings(); // Hämta bokningar
+	IEnumerable<IBooking> GetBookings(); // Hämta bokningar
 	//IBooking GetBooking (int vehicleId);
 	//IPerson GetPerson(string socialSecurityNumber);
 	//IPerson GetPerson(int id);
