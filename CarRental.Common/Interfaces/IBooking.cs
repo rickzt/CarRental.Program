@@ -15,6 +15,9 @@ public interface IBooking
 	 int? odometerReturn { get; set; }
 	 DateTime dateRented { get; set; }
 	 DateTime? dateReturned { get; set; }
-	 double? cost { get; set; }
-	 BookingStatuses rentedStatus { get; set; }
+	 double? costDay { get; set; }
+	 double? costKm { get; set; }
+	BookingStatuses rentedStatus { get; set; }
+	string GetCost();
+	public string GetCostTest();
 }

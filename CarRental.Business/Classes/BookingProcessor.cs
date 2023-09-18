@@ -29,9 +29,6 @@ namespace CarRental.Business.Classes
 		{
             var customerList = _db.GetPersons().Where(x => x is Customer).Cast<Customer>().ToList();
 			return customerList;
-			
-
-
 		}
         public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default)
         {
