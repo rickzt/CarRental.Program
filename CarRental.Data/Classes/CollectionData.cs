@@ -20,7 +20,7 @@ namespace CarRental.Data.Classes
 			_vehicles.Add(new Car("BAC412", "Audi", 5000, 1.5, VehicleTypes.Sedan, 250, VehicleStatuses.Booked));
 			_vehicles.Add(new Car("SKT182", "Ford", 7650, 1, VehicleTypes.Van, 125, VehicleStatuses.Available));
 			_vehicles.Add(new Car("QPS991", "Jeep", 2475, 3, VehicleTypes.Combi, 225, VehicleStatuses.Booked));
-			_vehicles.Add(new Car("MMA572", "Yamaha", 1250, 3.5, VehicleTypes.Motorcycle, 275, VehicleStatuses.Available));
+			_vehicles.Add(new Motorcycle("MMA572", "Yamaha", 1250, 3.5, 275, VehicleStatuses.Available));
 
 			_bookings.Add(new Booking("LGA251", "Johan Enkvist (185235)", 10000, null, new DateTime(2011, 02, 02), null, null, BookingStatuses.Open, 1));;
 			_bookings.Add(new Booking("PGE501", "Anna Andersson (292452)", 5000, 5500, new DateTime(2011, 02, 02), new DateTime(2011, 03, 03), 175, BookingStatuses.Closed, 2));

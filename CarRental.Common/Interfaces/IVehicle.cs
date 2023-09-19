@@ -14,7 +14,9 @@ public interface IVehicle
     int odometer { get; set; }
     int costDay { get; set; }
     double costKm { get; set; }
-	VehicleTypes vehicleTypes { get; set; }
+    
 	VehicleStatuses vehicleStatuses { get; set; }
+
+    public VehicleTypes GetVehicleTypes();
 
 }

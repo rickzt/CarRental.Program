@@ -2,14 +2,20 @@
 @using CarRental.Business.Classes;
 @using CarRental.Common.Classes;
 @using CarRental.Common.Enums;
+@using CarRental.Common.Interfaces;
+@using CarRental.Data.Classes;
 @inject BookingProcessor bp;
 <PageTitle>Car Rental Assignment</PageTitle>
 
 <h1>Car Rental Assignment</h1>
 
-<p><input type="checkbox"> Available cars only</p>
 
-<!--<p><input type="checkbox" class="form-check-input" @bind="@showDummyList" value="" id="flexCheckDefault" /></p>-->
+<div class="btn-group" role="group" aria-label="Basic outlined example">
+	<button type="button" class="btn btn-outline-success" @onclick="(() => bp.GetVehiclesBS(VehicleStatuses.Available))">Available</button>
+	<button type="button" class="btn btn-outline-primary" @onclick="(() => bp.GetVehiclesAll())">All</button>
+	<button type="button" class="btn btn-outline-danger" @onclick="(() => bp.GetVehiclesBS(VehicleStatuses.Booked))">Booked</button>
+</div>
+<br />
 
 
 <p>Vehicles</p>
@@ -27,7 +33,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var v in bp.GetVehicles())
+			@foreach (var v in bp.carList) 
 			{
 
 				<tr class="text text:hover">
@@ -35,7 +41,7 @@
 					<td>@v.maker</td>
 					<td>@v.odometer</td>
 					<td>@v.costKm</td>
-					<td>@v.vehicleTypes</td>
+					<td>@v.GetVehicleTypes()</td>
 					<td>$@v.costDay</td>
 					<td><span class="badge rounded-pill @PillerFargCar(v.vehicleStatuses)">@v.vehicleStatuses</span></td>
 				</tr>
@@ -105,37 +111,41 @@
 @code {
 
 
-
-		string PillerFargCar(VehicleStatuses pillerFärg) // Testmetod för att ändra färgen på HTML'en (piller)
+	string PillerFargCar(VehicleStatuses pillerFärg) // Metod för att ändra färgen på piller)
+	{
+		string pillerFärg2 = string.Empty;
+		switch (pillerFärg)
 		{
-			string pillerFärg2 = string.Empty;
-			switch (pillerFärg)
-			{
-				case VehicleStatuses.Available:
-					return pillerFärg2 = "bg-primary";
+			case VehicleStatuses.Available:
+				return pillerFärg2 = "bg-primary";
 
-				case VehicleStatuses.Booked:
-					return pillerFärg2 = "bg-danger";
+			case VehicleStatuses.Booked:
+				return pillerFärg2 = "bg-danger";
 
-				default:
-					return string.Empty;
-			}
-
+			default:
+				return string.Empty;
 		}
-		string PillerFargBooking(BookingStatuses pillerFärg) // Testmetod för att ändra färgen på HTML'en (piller)
+
+	}
+	string PillerFargBooking(BookingStatuses pillerFärg) // Metod för att ändra färgen på piller)
+	{
+		string pillerFärg2 = string.Empty;
+		switch (pillerFärg)
 		{
-			string pillerFärg2 = string.Empty;
-			switch (pillerFärg)
-			{
-				case BookingStatuses.Open:
-					return pillerFärg2 = "bg-danger";
+			case BookingStatuses.Open:
+				return pillerFärg2 = "bg-danger";
 
-				case BookingStatuses.Closed:
-					return pillerFärg2 = "bg-success";
+			case BookingStatuses.Closed:
+				return pillerFärg2 = "bg-success";
 
-				default:
-					return string.Empty;
-			}
-
+			default:
+				return string.Empty;
 		}
+
+	}
+		
+	protected override async Task OnInitializedAsync()
+	{
+		bp.GetVehiclesAll();
+	}
 }
