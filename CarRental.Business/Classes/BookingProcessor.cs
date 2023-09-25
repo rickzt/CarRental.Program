@@ -23,9 +23,6 @@ namespace CarRental.Business.Classes
         {
             _db = db;
         }
-
-        // Klasserna ska innehålla logik för att beräkna kostnader, kilometer m.m
-
         public IEnumerable<Customer> GetCustomers()
 		{
             var customerList = _db.GetPersons().Where(x => x is Customer).Cast<Customer>().ToList();

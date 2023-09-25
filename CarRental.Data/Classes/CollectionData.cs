@@ -14,7 +14,7 @@ namespace CarRental.Data.Classes
 
 		public CollectionData() => SeedData();
 
-		void SeedData() // Lägg till kunder/bilar etc i listorna
+		void SeedData()
 		{
 			_vehicles.Add(new Car("ABC123", "Volvo", 7000, 2, VehicleTypes.Combi, 150, VehicleStatuses.Booked));
 			_vehicles.Add(new Car("BAC412", "Audi", 5000, 1.5, VehicleTypes.Sedan, 250, VehicleStatuses.Booked));

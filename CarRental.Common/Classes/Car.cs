@@ -6,7 +6,6 @@ namespace CarRental.Common.Classes;
 
 public class Car : IVehicle
 {
-		// Private om de tilldelas via constructor, public om man vill kunna anropa via t.ex car.regNr
         public string RegNr { get; init; }
         public string Maker { get; init; }
         public int Odometer { get; set; }

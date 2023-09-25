@@ -1,7 +1,6 @@
 ﻿
 using CarRental.Common.Enums;
 using CarRental.Common.Interfaces;
-//using CarRental.Common.Interfaces;
 
 namespace CarRental.Data.Interfaces;
 

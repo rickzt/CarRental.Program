@@ -6,7 +6,6 @@ namespace CarRental.Common.Classes
 {
 	public class Booking : IBooking
 	{
-        // Fixa stor bokstav på alla properties
         public string RegNr { get; init; }
         public string Ssn { get; init; }
         public int OdometerRent {  get; set; }
