@@ -37,7 +37,7 @@ namespace CarRental.Business.Classes
         }
         public IEnumerable<IVehicle> GetVehiclesFiltered(VehicleStatuses p)
         {
-            return _db.GetVehicles().Where(a => a.vehicleStatuses == p);
+            return _db.GetVehicles().Where(a => a.VehicleStatuses == p);
         }
 		public IEnumerable<IBooking> GetBookings()
         {

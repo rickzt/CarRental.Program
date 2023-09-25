@@ -6,24 +6,23 @@ namespace CarRental.Common.Classes;
 public class Motorcycle : IVehicle
 {
 	// Private om de tilldelas via constructor, public om man vill kunna anropa via t.ex car.regNr
-	public string regNr { get; set; }
-	public string maker { get; set; }
-	public int odometer { get; set; }
-	public int costDay { get; set; }
-	public double costKm { get; set; }
-	public VehicleTypes vehicleTypes = VehicleTypes.Motorcycle;
-	public VehicleStatuses vehicleStatuses { get; set; }
+	public string RegNr { get; init; }
+	public string Maker { get; init; }
+	public int Odometer { get; set; }
+	public int CostDay { get; set; }
+	public double CostKm { get; set; }
+	public VehicleTypes VehicleTypes = VehicleTypes.Motorcycle;
+	public VehicleStatuses VehicleStatuses { get; set; }
 
 
 	public Motorcycle(string regNr, string maker, int odometer, double costKm, int costDay, VehicleStatuses vehicleStatuses)
 	{
-		this.regNr = regNr;
-		this.maker = maker;
-		this.odometer = odometer;
-		this.costKm = costKm;
-
-		this.costDay = costDay;
-		this.vehicleStatuses = vehicleStatuses;
+		this.RegNr = regNr;
+		this.Maker = maker;
+		this.Odometer = odometer;
+		this.CostKm = costKm;
+		this.CostDay = costDay;
+		this.VehicleStatuses = vehicleStatuses;
 	}
-	public VehicleTypes GetVehicleTypes() { return vehicleTypes; }
+	public VehicleTypes GetVehicleTypes() { return VehicleTypes; }
 }

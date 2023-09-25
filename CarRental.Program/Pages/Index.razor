@@ -26,24 +26,36 @@
 				<th>RegNo</th>
 				<th>Make</th>
 				<th>Odometer</th>
-				<th>Cost/Km</th>
+				<th>$/Km</th>
 				<th>Vehicle Type</th>
 				<th>$/Day</th>
+				<th>Action</th>
 				<th>Status</th>
 			</tr>
 		</thead>
 		<tbody>
+			<tr>
+				<td><input placeholder="RegNo" /></td>
+				<td><input placeholder="Make" /></td>
+				<td><input placeholder="Odometer" /></td>
+				<td><input placeholder="$/Km" /></td>
+				<td>dropdown</td>
+				<td></td>
+				<td>Add button</td>
+				<td>Status</td>
+			</tr>
 			@foreach (var v in bp.carList) 
 			{
 
 				<tr class="text text:hover">
-					<td>@v.regNr</td>
-					<td>@v.maker</td>
-					<td>@v.odometer</td>
-					<td>@v.costKm</td>
+					<td>@v.RegNr</td>
+					<td>@v.Maker</td>
+					<td>@v.Odometer</td>
+					<td>@v.CostKm</td>
 					<td>@v.GetVehicleTypes()</td>
-					<td>$@v.costDay</td>
-					<td><span class="badge rounded-pill @PillerFargCar(v.vehicleStatuses)">@v.vehicleStatuses</span></td>
+					<td>$@v.CostDay</td>
+					<td>dropdown+button</td>
+					<td><span class="badge bg-@((v.VehicleStatuses == VehicleStatuses.Available) ? "primary" : "danger")">@v.VehicleStatuses</span></td>
 				</tr>
 			}
 		</tbody>
@@ -69,15 +81,14 @@
 			@foreach (var booking in bp.GetBookings())
 			{
 				<tr class="text text:hover">
-					<td>@booking.regNr</td>
-					<td>@booking.ssn</td>
-					<td>@booking.odometerRent</td>
-					<td>@booking.odometerReturn</td>
-					<td>@booking.dateRented.ToShortDateString()</td>
-					<td>@booking.dateReturned?.ToShortDateString()</td>
+					<td>@booking.RegNr</td>
+					<td>@booking.Ssn</td>
+					<td>@booking.OdometerRent</td>
+					<td>@booking.OdometerReturn</td>
+					<td>@booking.DateRented.ToShortDateString()</td>
+					<td>@booking.DateReturned?.ToShortDateString()</td>
 					<td>@booking.GetCost()</td>
-					<td>@booking.GetCostTest()</td>
-					<td><span class="badge @PillerFargBooking(booking.rentedStatus)">@booking.rentedStatus</span></td>
+					<td><span class="badge bg-@((booking.RentedStatus == BookingStatuses.Open) ? "danger" : "success")">@booking.RentedStatus</span></td>
 				</tr>
 			}
 		</tbody>
@@ -99,9 +110,9 @@
 			@foreach (var customer in bp.GetCustomers())
 			{
 				<tr class="text text:hover">
-					<td>@customer.ssn</td>
-					<td>@customer.lastName</td>
-					<td>@customer.firstName</td>
+					<td>@customer.Ssn</td>
+					<td>@customer.LastName</td>
+					<td>@customer.FirstName</td>
 				</tr>
 			}
 		</tbody>
@@ -109,41 +120,7 @@
 </div>
 
 @code {
-
-
-	string PillerFargCar(VehicleStatuses pillerFärg) // Metod för att ändra färgen på piller)
-	{
-		string pillerFärg2 = string.Empty;
-		switch (pillerFärg)
-		{
-			case VehicleStatuses.Available:
-				return pillerFärg2 = "bg-primary";
-
-			case VehicleStatuses.Booked:
-				return pillerFärg2 = "bg-danger";
-
-			default:
-				return string.Empty;
-		}
-
-	}
-	string PillerFargBooking(BookingStatuses pillerFärg) // Metod för att ändra färgen på piller)
-	{
-		string pillerFärg2 = string.Empty;
-		switch (pillerFärg)
-		{
-			case BookingStatuses.Open:
-				return pillerFärg2 = "bg-danger";
-
-			case BookingStatuses.Closed:
-				return pillerFärg2 = "bg-success";
-
-			default:
-				return string.Empty;
-		}
-
-	}
-		
+	
 	protected override async Task OnInitializedAsync()
 	{
 		bp.GetVehiclesAll();

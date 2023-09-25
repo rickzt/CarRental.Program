@@ -9,15 +9,15 @@ namespace CarRental.Common.Interfaces;
 
 public interface IBooking
 {
-	 string regNr { get; set; }
-	 string ssn { get; set; }
-	 int odometerRent {  get; set; }
-	 int? odometerReturn { get; set; }
-	 DateTime dateRented { get; set; }
-	 DateTime? dateReturned { get; set; }
-	 double? costDay { get; set; }
-	 double? costKm { get; set; }
-	BookingStatuses rentedStatus { get; set; }
-	string GetCost();
-	public string GetCostTest();
+	 string RegNr { get; init; }
+	 string Ssn { get; init; }
+	 int OdometerRent {  get; set; }
+	 int? OdometerReturn { get; set; }
+	 DateTime DateRented { get; set; }
+	 DateTime? DateReturned { get; set; }
+	 double? CostDay { get; set; }
+	 double? CostKm { get; set; }
+	BookingStatuses RentedStatus { get; set; }
+	string? GetCost();
+
 }
