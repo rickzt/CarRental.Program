@@ -24,7 +24,7 @@ namespace CarRental.Data.Classes
 
 			_bookings.Add(new Booking("LGA251", "Johan Enkvist (185235)", 10000, null, new DateTime(2011, 02, 02), null, null, BookingStatuses.Open, 1));;
 			_bookings.Add(new Booking("PGE501", "Anna Andersson (292452)", 5000, 5500, new DateTime(2011, 02, 02), new DateTime(2011, 03, 03), 175, BookingStatuses.Closed, 2));
-			_bookings.Add(new Booking("PGE501", "Johan Åkesson (526737)", 5000, 5251, new DateTime(2011, 02, 02), new DateTime(2011, 03, 03), 175, BookingStatuses.Closed, 1.5));
+			_bookings.Add(new Booking("PGE501", "Johan Åkesson (526737)", 5000, 5251, new DateTime(2011, 02, 02), new DateTime(2011, 03, 23), 175, BookingStatuses.Closed, 1.5));
 
 			_persons.Add(new Customer(123456, "Svensson", "Jonas"));
 			_persons.Add(new Customer(654321, "Andersson", "Andreas"));
