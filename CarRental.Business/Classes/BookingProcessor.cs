@@ -17,8 +17,6 @@ namespace CarRental.Business.Classes
     public class BookingProcessor
     {
         private readonly IData _db;
-		public IEnumerable<IVehicle> carList = new List<IVehicle>(); // Listan som ändras i UI't.
-
 		public BookingProcessor(IData db)
         {
             _db = db;
@@ -32,23 +30,9 @@ namespace CarRental.Business.Classes
         {
             return _db.GetVehicles(status);
         }
-        public IEnumerable<IVehicle> GetVehiclesFiltered(VehicleStatuses p)
-        {
-            return _db.GetVehicles().Where(a => a.VehicleStatuses == p);
-        }
 		public IEnumerable<IBooking> GetBookings()
         {
             return _db.GetBookings();
         }
-
-
-		public void GetVehiclesBS(VehicleStatuses p) // Visar Bokade eller Tillgängliga bilar
-		{
-			carList = GetVehiclesFiltered(p);
-		}
-		public void GetVehiclesAll() // Visar alla bilar igen
-		{
-			carList = GetVehicles();
-		}
 	}
 }

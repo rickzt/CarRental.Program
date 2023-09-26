@@ -8,8 +8,8 @@ public class Car : IVehicle
 {
         public string RegNr { get; init; }
         public string Maker { get; init; }
-        public int Odometer { get; set; }
-        public int CostDay { get; set; }
+        public int? Odometer { get; set; }
+        public int? CostDay { get; set; }
         public double CostKm { get; set; }
 		public VehicleTypes VehicleTypes { get; set; }
 		public VehicleStatuses VehicleStatuses { get; set; }
@@ -25,6 +25,8 @@ public class Car : IVehicle
 		this.CostDay = costDay;
 		this.VehicleStatuses = vehicleStatuses;
 	}
+	// Constructor for booking.
+	public Car(string regNr, int? costDay, double costKm, int? odometer) => (RegNr, CostDay, CostKm, Odometer) = (regNr, costDay, costKm, odometer);
 	public VehicleTypes GetVehicleTypes()
 	{ return VehicleTypes; }
 

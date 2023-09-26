@@ -7,14 +7,14 @@ public class Motorcycle : IVehicle
 {
 	public string RegNr { get; init; }
 	public string Maker { get; init; }
-	public int Odometer { get; set; }
-	public int CostDay { get; set; }
+	public int? Odometer { get; set; }
+	public int? CostDay { get; set; }
 	public double CostKm { get; set; }
 	public VehicleTypes VehicleTypes = VehicleTypes.Motorcycle;
 	public VehicleStatuses VehicleStatuses { get; set; }
 
 
-	public Motorcycle(string regNr, string maker, int odometer, double costKm, int costDay, VehicleStatuses vehicleStatuses)
+	public Motorcycle(string regNr, string maker, int? odometer, double costKm, int costDay, VehicleStatuses vehicleStatuses)
 	{
 		this.RegNr = regNr;
 		this.Maker = maker;
