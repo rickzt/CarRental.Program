@@ -17,19 +17,19 @@ namespace CarRental.Common.Classes
 		public BookingStatuses RentedStatus { get; set; }
 
 
-        public Booking(string regNr, string ssn, int odometerRent, int? odometerReturn, DateTime dateRented, DateTime? dateReturned, double? costDay, BookingStatuses rentedStatus, double? costKm)
+        public Booking(IVehicle vehicle, string ssn, int odometerRent, DateTime dateRented, DateTime? dateReturned, BookingStatuses rentedStatus)
         {
-            this.RegNr = regNr;
+            this.RegNr = vehicle.RegNr;
             this.Ssn = ssn;
             this.OdometerRent = odometerRent;
-            this.OdometerReturn = odometerReturn;
+            this.OdometerReturn = vehicle.Odometer;
             this.DateRented = dateRented;
             this.DateReturned = dateReturned;
             this.RentedStatus = rentedStatus;
-            this.CostDay = costDay;
-            this.CostKm = costKm;
+            this.CostDay = vehicle.CostDay;
+            this.CostKm = vehicle.CostKm;
         }
-		public string? GetCost()
+        public string? GetCost()
 		{
 			var daysRented = (DateReturned - DateRented)?.TotalDays;
 			var kmDriven = (OdometerReturn - OdometerRent);
