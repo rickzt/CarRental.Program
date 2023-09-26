@@ -15,8 +15,6 @@
 	<button type="button" class="btn btn-outline-danger" @onclick="(()=> filteredStatuses=VehicleStatuses.Booked)">Booked</button>
 </div>
 
-<button type="button" class="btn btn-outline-danger" @onclick="TestAddButton">TestAdd</button>
-<h1>@message</h1>
 
 
 <br />
@@ -36,24 +34,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td><input placeholder="RegNo" @bind="testRegNo"/></td>
-				<td><input placeholder="Make" @bind="testMake"/></td>
-				<td><input placeholder="Odometer" @bind="testOdometer" /></td>
-				<td><input placeholder="$/Km" @bind="testCostKm" /></td>
-				<td>
-					<select id="cars" name="cars" placeholder="Test" @bind="testVehicleType">
-						<option value="" disabled selected hidden>Choose type</option>
-						<option value="Combi">@VehicleTypes.Combi</option>
-						<option value="Motorcycle">@VehicleTypes.Motorcycle</option>
-						<option value="Van">@VehicleTypes.Van</option>
-						<option value="Sedan">@VehicleTypes.Sedan</option>
-					</select>
-				</td>
-				<td></td>
-				<td>Add button</td>
-				<td>Status</td>
-			</tr>
+
 			@foreach (var v in bp.GetVehicles(filteredStatuses)) 
 			{
 
@@ -133,35 +114,8 @@
 
 	VehicleStatuses filteredStatuses = default; 
 
-
-
-
-	string testRegNo = string.Empty;
-	string testMake = string.Empty;
-	string testOdometer = string.Empty;
-	string testCostKm = string.Empty;
-	string testVehicleType = string.Empty;
-
-	string message = "Testmeddelande";
-
-
-
 	protected override async Task OnInitializedAsync()
 	{
 		bp.GetVehicles();
-	}
-	void TestAddButton()
-	{
-		if (testRegNo != string.Empty && testMake != string.Empty && testOdometer != string.Empty && testCostKm != string.Empty && testVehicleType != string.Empty)
-		{
-			message = "Not empty";
-			Int32.TryParse(testOdometer, out int odometerNumber);
-
-
-		}
-		else
-		{
-			message = "Empty";
-		}
 	}
 }
