@@ -17,6 +17,7 @@ namespace CarRental.Business.Classes
     public class BookingProcessor
     {
         private readonly IData _db;
+
 		public BookingProcessor(IData db)
         {
             _db = db;
@@ -29,10 +30,21 @@ namespace CarRental.Business.Classes
         public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default)
         {
             return _db.GetVehicles(status);
-        }
+		}
 		public IEnumerable<IBooking> GetBookings()
         {
             return _db.GetBookings();
         }
+        public void AddNewVehicleButton(Inputs input)
+        {
+			var newV = input.AddNewVehicle();
+            if (newV != null)
+            {
+                _db.AddNewVehicle(newV);
+                input.NullButtons();
+            }
+            else
+                input.NullButtons();
+		}
 	}
 }

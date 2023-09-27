@@ -5,19 +5,18 @@
 @using CarRental.Common.Interfaces;
 @using CarRental.Data.Classes;
 @inject BookingProcessor bp;
+@inject Inputs input;
 <PageTitle>Car Rental Assignment</PageTitle>
 
 <h1>Car Rental Assignment</h1>
 
 <div class="btn-group" role="group" aria-label="Basic outlined example">
-	<button type="button" class="btn btn-outline-success" @onclick="(() => filteredStatuses=VehicleStatuses.Available)">Available</button>
-	<button type="button" class="btn btn-outline-primary" @onclick="(() => filteredStatuses=default)">All</button>
-	<button type="button" class="btn btn-outline-danger" @onclick="(()=> filteredStatuses=VehicleStatuses.Booked)">Booked</button>
+	<button type="button" class="btn btn-outline-success" @onclick="(() =>input.filteredStatuses=VehicleStatuses.Available)">Available</button>
+	<button type="button" class="btn btn-outline-primary" @onclick="(() =>input.filteredStatuses=default)">All</button>
+	<button type="button" class="btn btn-outline-danger" @onclick="(()=>input.filteredStatuses=VehicleStatuses.Booked)">Booked</button>
 </div>
 
-<button type="button" class="btn btn-outline-danger" @onclick="TestAddButton">TestAdd</button>
-<h1>@message</h1>
-
+<button type="button" class="btn btn-outline-danger" @onclick="(()=>bp.AddNewVehicleButton(input))">TestAdd</button>
 
 <br />
 <p>Vehicles</p>
@@ -37,12 +36,12 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><input placeholder="RegNo" @bind="testRegNo"/></td>
-				<td><input placeholder="Make" @bind="testMake"/></td>
-				<td><input placeholder="Odometer" @bind="testOdometer" /></td>
-				<td><input placeholder="$/Km" @bind="testCostKm" /></td>
+				<td><input placeholder="RegNo" @bind="input.RegNo" /></td>
+				<td><input placeholder="Make" @bind="input.Make" /></td>
+				<td><input placeholder="Odometer" type="number" @bind="input.Odometer" /></td>
+				<td><input placeholder="$/Km" type="number" @bind="input.CostKm" /></td>
 				<td>
-					<select id="cars" name="cars" placeholder="Test" @bind="testVehicleType">
+					<select id="cars" name="cars" placeholder="Test" @bind="input.VehicleType">
 						<option value="" disabled selected hidden>Choose type</option>
 						<option value="Combi">@VehicleTypes.Combi</option>
 						<option value="Motorcycle">@VehicleTypes.Motorcycle</option>
@@ -54,9 +53,8 @@
 				<td>Add button</td>
 				<td>Status</td>
 			</tr>
-			@foreach (var v in bp.GetVehicles(filteredStatuses)) 
+			@foreach (var v in bp.GetVehicles(input.filteredStatuses)) 
 			{
-
 				<tr class="text text:hover">
 					<td>@v.RegNr</td>
 					<td>@v.Maker</td>
@@ -129,39 +127,7 @@
 	</table>
 </div>
 
-@code {
+@code 
+{
 
-	VehicleStatuses filteredStatuses = default; 
-
-
-
-
-	string testRegNo = string.Empty;
-	string testMake = string.Empty;
-	string testOdometer = string.Empty;
-	string testCostKm = string.Empty;
-	string testVehicleType = string.Empty;
-
-	string message = "Testmeddelande";
-
-
-
-	protected override async Task OnInitializedAsync()
-	{
-		bp.GetVehicles();
-	}
-	void TestAddButton()
-	{
-		if (testRegNo != string.Empty && testMake != string.Empty && testOdometer != string.Empty && testCostKm != string.Empty && testVehicleType != string.Empty)
-		{
-			message = "Not empty";
-			Int32.TryParse(testOdometer, out int odometerNumber);
-
-
-		}
-		else
-		{
-			message = "Empty";
-		}
-	}
 }

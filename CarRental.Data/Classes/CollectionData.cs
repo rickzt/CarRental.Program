@@ -11,7 +11,7 @@ namespace CarRental.Data.Classes
 		readonly List<IPerson> _persons = new List<IPerson>();
 		readonly List<IVehicle> _vehicles = new List<IVehicle>();
 		readonly List<IBooking> _bookings = new List<IBooking>();
-        public IEnumerable<IVehicle> carList = new List<IVehicle>(); // Listan som ändras i UI't.
+        //public IEnumerable<IVehicle> carList = new List<IVehicle>(); // Listan som ändras i UI't.
 
         public CollectionData() => SeedData();
 
@@ -37,5 +37,9 @@ namespace CarRental.Data.Classes
 		public IEnumerable<IBooking> GetBookings() => _bookings;
 		public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => 
 			status == default ? _vehicles : _vehicles.Where(a => a.VehicleStatuses == status);
+		public void AddNewVehicle(IVehicle v)
+		{
+			_vehicles.Add(v);
+		}
 	}
 }
