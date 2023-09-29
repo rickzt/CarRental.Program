@@ -8,6 +8,48 @@
     text-decoration: none;
 }
 
-    .text:hover {
-        background-color: rgba(243, 243, 243, 0.5);
-    }
+.text:hover {
+    background-color: rgba(243, 243, 243, 0.5);
+}
+.w13{
+    width:13% !important;
+}
+.w18{
+    width:18% !important;
+}
+.w25{
+    width:25% !important;
+}
+.w35 {
+    width: 35% !important;
+}
+.w50{
+    width: 50% !important;
+    min-width: 80px;
+    max-width: 120px;
+}
+.w75 {
+    width: 75% !important;
+    min-width: 120px;
+}
+.w100{
+    width: 100% !important;
+}
+.w50 {
+    witdh: 50% !important;
+}
+.w150{
+    width: 150% !important;
+}
+.w125{
+    width: 125% !important;
+}
+.w110{
+    width: 110% !important;
+}
+.h80{
+    height:80% !important;
+}
+.container-cus{
+    max-width: 75% !important;
+}

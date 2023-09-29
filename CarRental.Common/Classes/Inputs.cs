@@ -21,7 +21,7 @@ public class Inputs
 	public VehicleTypes? VehicleType = default;
 	public VehicleStatuses VehicleStatuses = VehicleStatuses.Available;
 	public VehicleStatuses filteredStatuses { get; set; } = default;
-	public int Ssn { get; set; }
+	public int? Ssn { get; set; }
 	public string FirstName { get; set; }
 	public string LastName { get; set; }
 
@@ -73,5 +73,6 @@ public class Inputs
 		Odometer = null;
 		CostKm = null;
 		VehicleType = null;
+		CostDay = null;
 	}
 }

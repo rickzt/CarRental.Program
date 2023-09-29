@@ -7,9 +7,9 @@ namespace CarRental.Common.Classes
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
-		public int Ssn { get; init; }
+		public int? Ssn { get; init; }
 
-		public Customer(int ssn, string lastName, string firstName)
+		public Customer(int? ssn, string lastName, string firstName)
 		{
 			this.Ssn = ssn;
 			this.LastName = lastName;

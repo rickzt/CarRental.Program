@@ -38,15 +38,14 @@ namespace CarRental.Business.Classes
         }
         public void AddNewVehicleButton(Inputs input, IVehicle? vehicle)
         {
-            // ta in en bil i parametern och lägg till ID med hjälp av en annan Car konstruktor.
             vehicle = input.AddNewVehicle();
             var id = _db.GetVehicles().Max(x => x.Id) + 1;
-            if (vehicle.GetVehicleTypes() == VehicleTypes.Motorcycle && vehicle != null)
+            if (vehicle?.GetVehicleTypes() == VehicleTypes.Motorcycle && vehicle != null)
             {
                 var newVehicle = new Motorcycle(id, vehicle);
 				_db.AddNewVehicle(newVehicle);
 			}
-			else if (vehicle.GetVehicleTypes() != VehicleTypes.Motorcycle && vehicle != null)
+			else if (vehicle?.GetVehicleTypes() != VehicleTypes.Motorcycle && vehicle != null)
             {
 				var newVehicle = new Motorcycle(id, vehicle);
 				_db.AddNewVehicle(newVehicle);

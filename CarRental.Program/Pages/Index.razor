@@ -21,14 +21,14 @@
 <p>@input.Testmessage</p>
 <br />
 <p>Vehicles</p>
-<div class="container border border-dark border-1 row">
-	<table class="table">
+<div class="container border border-dark border-1 row w100">
+	<table class="table w100">
 		<thead>
 			<tr>
-				<th>RegNo</th>
-				<th>Make</th>
-				<th>Odometer</th>
-				<th>$/Km</th>
+				<th class="w13">RegNo</th>
+				<th class="w13">Make</th>
+				<th class="w13">Odometer</th>
+				<th class="w13">$/Km</th>
 				<th>Vehicle Type</th>
 				<th>$/Day</th>
 				<th>Action</th>
@@ -37,10 +37,10 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><input placeholder="RegNo" @bind="input.RegNo" /></td>
-				<td><input placeholder="Make" @bind="input.Make" /></td>
-				<td><input placeholder="Odometer" type="number" @bind="input.Odometer" /></td>
-				<td><input placeholder="$/Km" type="number" @bind="input.CostKm" /></td>
+				<td class="w13"><input class="w50" placeholder="RegNo" @bind="input.RegNo" /></td>
+				<td class="w13"><input class="w50" placeholder="Make" @bind="input.Make" /></td>
+				<td class="w18"><input class="w50" placeholder="Odometer" type="number" @bind="input.Odometer" /></td>
+				<td class="w13"><input class="w50" placeholder="$/Km" type="number" @bind="input.CostKm" /></td>
 				<td>
 					<select id="cars" name="cars" placeholder="Test" @bind="input.VehicleType">
 						<option value="" disabled selected hidden>Choose type</option>
@@ -50,14 +50,14 @@
 						<option value="Sedan">@VehicleTypes.Sedan</option>
 					</select>
 				</td>
-				<td></td>
-				<td>Add button</td>
+				<td class="w13"><input class="w50" placeholder="$/Day" type="number" @bind="input.CostDay"/></td>
+				<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.AddNewVehicleButton(input, default))">Add</button></td>
 				<td>Status</td>
 			</tr>
 			@foreach (var v in bp.GetVehicles(input.filteredStatuses)) 
 			{
 				<tr class="text text:hover">
-					<td>@v.Id</td>
+					@*<td>@v.Id</td>*@
 					<td>@v.RegNr</td>
 					<td>@v.Maker</td>
 					<td>@v.Odometer</td>
@@ -115,19 +115,18 @@
 
 <br />
 <p>Customers</p>
-<div class="container container-small border-dark border-1 border row">
+<div class="container container-sm border-dark border-1 border row">
 	<table class="table">
 		<thead>
 			<tr>
 				<th>SSN</th>
 				<th>Last Name</th>
 				<th>First Name</th>
-
 			</tr>
 			<tr>
 				<td><input placeholder="SSN" type="number" @bind="input.Ssn" /></td>
 				<td><input placeholder="First name" @bind="input.FirstName" /></td>
-				<td><input placeholder="Last name"  @bind="input.LastName" /><span><button class="btn btn-sm" @onclick="(()=>bp.AddNewCustomerButton(input))">+</button></span></td>
+				<td><input class="w50" placeholder="Last name" @bind="input.LastName"/>   <span><button button type="button" class="btn btn-primary btn-sm" @onclick="(()=>bp.AddNewCustomerButton(input))">+</button></span></td>
 			</tr>
 		</thead>
 		<tbody>
