@@ -9,10 +9,12 @@ namespace CarRental.Common.Interfaces;
 
 public interface IBooking
 {
-	 string RegNr { get; init; }
+	public IPerson Customer { get; set; }
+	string RegNr { get; init; }
 	 string Ssn { get; init; }
-	 int OdometerRent {  get; set; }
-	 int? OdometerReturn { get; set; }
+	 int? OdometerRent {  get; set; }
+	public IVehicle Vehicle { get; set; }
+	int? OdometerReturn { get; set; }
 	 DateTime DateRented { get; set; }
 	 DateTime? DateReturned { get; set; }
 	 double? CostDay { get; set; }

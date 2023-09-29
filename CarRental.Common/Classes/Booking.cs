@@ -6,9 +6,12 @@ namespace CarRental.Common.Classes
 {
 	public class Booking : IBooking
 	{
-        public string RegNr { get; init; }
         public string Ssn { get; init; }
-        public int OdometerRent {  get; set; }
+        public int Id { get; set; }
+        public string RegNr { get; init; }
+        public IPerson Customer { get; set; }
+        public IVehicle Vehicle { get; set; }
+        public int? OdometerRent {  get; set; }
         public int? OdometerReturn { get; set; }
         public DateTime DateRented {  get; set; }
         public DateTime? DateReturned {  get; set; }
@@ -17,12 +20,13 @@ namespace CarRental.Common.Classes
 		public BookingStatuses RentedStatus { get; set; }
 
 
-        public Booking(IVehicle vehicle, string ssn, int odometerRent, DateTime dateRented, DateTime? dateReturned, BookingStatuses rentedStatus)
+
+        public Booking(IVehicle vehicle, IPerson customer, int? odometerReturned, DateTime dateRented, DateTime? dateReturned, BookingStatuses rentedStatus)
         {
             this.RegNr = vehicle.RegNr;
-            this.Ssn = ssn;
-            this.OdometerRent = odometerRent;
-            this.OdometerReturn = vehicle.Odometer;
+            this.Customer = customer;
+            this.OdometerRent = vehicle.Odometer;
+            this.OdometerReturn = odometerReturned; // lägg in info som sätter nya odometer efter return.
             this.DateRented = dateRented;
             this.DateReturned = dateReturned;
             this.RentedStatus = rentedStatus;
@@ -35,7 +39,6 @@ namespace CarRental.Common.Classes
 			var kmDriven = (OdometerReturn - OdometerRent);
 			var totalCost = (CostDay * daysRented) + (CostKm * kmDriven);
             return totalCost?.ToString(totalCost % 1 == 0 ? "C0" : "C1", CultureInfo.CreateSpecificCulture("en-US"));
-			
 		}
     }
 }

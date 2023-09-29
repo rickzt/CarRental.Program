@@ -16,10 +16,16 @@ public class Inputs
 	public string Make { get; set; } = string.Empty;
 	public int? Odometer { get; set; } = null;
 	public double? CostKm { get; set; } = null;
+	public Customer Customer { get; set; }
 	public int? CostDay { get; set; } = null;
 	public VehicleTypes? VehicleType = default;
 	public VehicleStatuses VehicleStatuses = VehicleStatuses.Available;
 	public VehicleStatuses filteredStatuses { get; set; } = default;
+	public int Ssn { get; set; }
+	public string FirstName { get; set; }
+	public string LastName { get; set; }
+
+	public string Testmessage { get; set; } = string.Empty;
 
 
 
@@ -29,13 +35,15 @@ public class Inputs
 		{
 			if (VehicleType == VehicleTypes.Motorcycle)
 			{
-				var vehicle = new Motorcycle(RegNo, Make, Odometer, (double)CostKm, 150, VehicleStatuses);
+				// FIXA ID!!
+				var vehicle = new Motorcycle(0, RegNo, Make, Odometer, (double)CostKm, 150, VehicleStatuses);
 				RegNo = string.Empty; Make = string.Empty; Odometer = null; CostKm = null; VehicleType = null;
 				return vehicle;
 			}
 			else
 			{
-				var vehicle = new Car(RegNo, Make, (int)Odometer, (double)CostKm, (VehicleTypes)VehicleType, 150, VehicleStatuses);
+				// FIXA ID!!
+				var vehicle = new Car(0, RegNo, Make, (int)Odometer, (double)CostKm, (VehicleTypes)VehicleType, 150, VehicleStatuses);
 				RegNo = string.Empty; Make = string.Empty; Odometer = null; CostKm = null; VehicleType = null;
 				return vehicle;
 			}
@@ -45,6 +53,18 @@ public class Inputs
 
 			return null;
 		}
+	}
+	public IPerson? AddNewCustomer()
+	{
+		if (Ssn > 0 && FirstName != string.Empty && LastName != string.Empty)
+		{
+			var customer = new Customer(Ssn, FirstName, LastName);
+			Testmessage = "worked";
+			return customer;
+		}
+		else
+			Testmessage = "didnt work";
+			return null;
 	}
 	public void NullButtons()
 	{

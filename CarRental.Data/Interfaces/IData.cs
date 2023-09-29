@@ -18,4 +18,5 @@ public interface IData
 
 
 	void AddNewVehicle(IVehicle v);
+	void AddNewCustomer(IPerson v);
 }
