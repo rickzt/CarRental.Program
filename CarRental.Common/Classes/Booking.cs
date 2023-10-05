@@ -17,11 +17,11 @@ namespace CarRental.Common.Classes
         public DateTime? DateReturned {  get; set; }
         public double? CostDay { get; set; }
 		public double? CostKm { get; set; }
-		public BookingStatuses RentedStatus { get; set; }
+		public VehicleStatuses RentedStatus { get; set; }
 
 
 
-        public Booking(IVehicle vehicle, IPerson customer, int? odometerReturned, DateTime dateRented, DateTime? dateReturned, BookingStatuses rentedStatus)
+        public Booking(IVehicle vehicle, IPerson customer, int? odometerReturned, DateTime dateRented, DateTime? dateReturned, VehicleStatuses rentedStatus)
         {
             this.RegNr = vehicle.RegNr;
             this.Customer = customer;
@@ -33,7 +33,22 @@ namespace CarRental.Common.Classes
             this.CostDay = vehicle.CostDay;
             this.CostKm = vehicle.CostKm;
         }
-        public string? GetCost()
+		public Booking(int Id, IVehicle vehicle, IPerson customer, int? odometerReturned, DateTime dateRented, DateTime? dateReturned, VehicleStatuses rentedStatus)
+		{
+            Vehicle = vehicle;
+            Customer = customer;
+			this.Id = Id;
+            this.RegNr = vehicle.RegNr;
+			this.Customer = customer;
+			this.OdometerRent = vehicle.Odometer;
+			this.OdometerReturn = odometerReturned; // lägg in info som sätter nya odometer efter return.
+			this.DateRented = dateRented;
+			this.DateReturned = dateReturned;
+			this.RentedStatus = rentedStatus;
+			this.CostDay = vehicle.CostDay;
+			this.CostKm = vehicle.CostKm;
+		}
+		public string? GetCost()
 		{
 			var daysRented = (DateReturned - DateRented)?.TotalDays;
 			var kmDriven = (OdometerReturn - OdometerRent);

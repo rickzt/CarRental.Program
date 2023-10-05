@@ -52,4 +52,5 @@ public class Car : IVehicle
 	}
 	public VehicleTypes GetVehicleTypes()
 	{ return VehicleTypes; }
+	
 }

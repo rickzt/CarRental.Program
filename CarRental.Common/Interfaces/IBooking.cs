@@ -9,6 +9,7 @@ namespace CarRental.Common.Interfaces;
 
 public interface IBooking
 {
+	public int Id { get; set; }
 	public IPerson Customer { get; set; }
 	string RegNr { get; init; }
 	 string Ssn { get; init; }
@@ -19,7 +20,7 @@ public interface IBooking
 	 DateTime? DateReturned { get; set; }
 	 double? CostDay { get; set; }
 	 double? CostKm { get; set; }
-	BookingStatuses RentedStatus { get; set; }
+    VehicleStatuses RentedStatus { get; set; }
 	string? GetCost();
 
 }

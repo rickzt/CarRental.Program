@@ -18,7 +18,12 @@
 
 <button type="button" class="btn btn-outline-danger" @onclick="(()=>bp.AddNewVehicleButton(input, default))">TestAdd</button>
 
+@if(input.ErrorMessage.Length > 0)
+{
+<p><div class="alert alert-danger" role="alert">
+  @input.Testmessage</div></p>
 <p>@input.Testmessage</p>
+}
 <br />
 <p>Vehicles</p>
 <div class="container border border-dark border-1 row w100">
@@ -37,20 +42,17 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td class="w13"><input class="w50" placeholder="RegNo" @bind="input.RegNo" /></td>
-				<td class="w13"><input class="w50" placeholder="Make" @bind="input.Make" /></td>
-				<td class="w18"><input class="w50" placeholder="Odometer" type="number" @bind="input.Odometer" /></td>
-				<td class="w13"><input class="w50" placeholder="$/Km" type="number" @bind="input.CostKm" /></td>
-				<td>
-					<select id="cars" name="cars" placeholder="Test" @bind="input.VehicleType">
-						<option value="" disabled selected hidden>Choose type</option>
-						<option value="Combi">@VehicleTypes.Combi</option>
-						<option value="Motorcycle">@VehicleTypes.Motorcycle</option>
-						<option value="Van">@VehicleTypes.Van</option>
-						<option value="Sedan">@VehicleTypes.Sedan</option>
-					</select>
+				<td class="w13"><input class="w50 form-control" placeholder="RegNo" @bind="input.RegNo" /></td>
+				<td class="w13"><input class="w50 form-control" placeholder="Make" @bind="input.Make" /></td>
+				<td class="w18"><input class="w50 form-control" placeholder="Odometer" type="number" @bind="input.Odometer" /></td>
+				<td class="w13"><input class="w50 form-control" placeholder="$/Km" type="number" @bind="input.CostKm" /></td>
+				<td class="w50">
+				<select class="form-control" @bind="input.VehicleType">
+					<option value="" disabled selected hidden>Choose type</option>
+					@foreach(var vt in Enum.GetNames(typeof(VehicleTypes))){<option value="@vt">@vt</option>}
+				</select>
 				</td>
-				<td class="w13"><input class="w50" placeholder="$/Day" type="number" @bind="input.CostDay"/></td>
+				<td class="w100"><input class="w100 input-min75 form-control" placeholder="$/Day" type="number" @bind="input.CostDay"/></td>
 				<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.AddNewVehicleButton(input, default))">Add</button></td>
 				<td>Status</td>
 			</tr>
@@ -64,17 +66,28 @@
 					<td>@v.CostKm</td>
 					<td>@v.GetVehicleTypes()</td>
 					<td>$@v.CostDay</td>
+					@if (v.VehicleStatuses == VehicleStatuses.Available)
+					{
 					<td>
-						<select id="customers" name="customers" placeholder="customerszz">
-							<option value="" disabled selected hidden>Rent</option>
+						<select @bind="input.customerId">
+							<option value="Test" disabled selected hidden>Rent</option>
 							@foreach (var customer in bp.GetCustomers())
 							{
-								<option value="@customer.FirstName">@customer.FirstName @customer.LastName</option>
+								<option value="@customer.Id">@customer.FirstName @customer.LastName</option>
 							}
 						</select>
 					</td>
-					<td><span class="badge bg-@((v.VehicleStatuses == VehicleStatuses.Available) ? "primary" : "danger")">@v.VehicleStatuses</span></td>
-				</tr>
+					<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>{bp.RentVehicle(v.Id, input.customerId); input.rentedtest(); input.Distance=null;})">Rent</button></td>
+					}
+					else
+					{
+					<td><input class="form-control" placeholder="Distance" size="15" @bind="input.Distance"/></td>
+					<td><span>
+							<button size="15" type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.ReturnVehicle(v.Id, input.Distance ?? 0))">Return</button>
+					</span></td>
+					}
+				<td><span class="badge bg-@((v.VehicleStatuses == VehicleStatuses.Available) ? "primary" : "danger")">@v.VehicleStatuses</span></td>
+			</tr>
 			}
 		</tbody>
 	</table>
@@ -99,6 +112,9 @@
 			@foreach (var booking in bp.GetBookings())
 			{
 				<tr class="text text:hover">
+					@*
+					<td>@booking.Id</td>*@
+					@*<td>@booking.Vehicle.Id</td>*@
 					<td>@booking.RegNr</td>
 					<td>@booking.Customer.FirstName @booking.Customer.LastName (@booking.Customer.Ssn)</td>
 					<td>@booking.OdometerRent</td>
@@ -106,7 +122,7 @@
 					<td>@booking.DateRented.ToShortDateString()</td>
 					<td>@booking.DateReturned?.ToShortDateString()</td>
 					<td>@booking.GetCost()</td>
-					<td><span class="badge bg-@((booking.RentedStatus == BookingStatuses.Open) ? "danger" : "success")">@booking.RentedStatus</span></td>
+					<td><span class="badge bg-@((booking.RentedStatus == VehicleStatuses.Booked) ? "danger" : "success")">@((booking.RentedStatus == VehicleStatuses.Booked) ? "Open" : "Closed")</span></td>
 				</tr>
 			}
 		</tbody>
@@ -115,7 +131,7 @@
 
 <br />
 <p>Customers</p>
-<div class="container container-sm border-dark border-1 border row">
+<div class="container container-small border-dark border-1 border row">
 	<table class="table">
 		<thead>
 			<tr>
@@ -126,7 +142,7 @@
 			<tr>
 				<td><input placeholder="SSN" type="number" @bind="input.Ssn" /></td>
 				<td><input placeholder="First name" @bind="input.FirstName" /></td>
-				<td><input class="w50" placeholder="Last name" @bind="input.LastName"/>   <span><button button type="button" class="btn btn-primary btn-sm" @onclick="(()=>bp.AddNewCustomerButton(input))">+</button></span></td>
+				<td><input class="w75" placeholder="Last name" @bind="input.LastName"/>   <span><button button type="button" class="btn btn-primary btn-sm" @onclick="(()=>bp.AddNewCustomerButton(input))">+</button></span></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -144,5 +160,47 @@
 
 @code 
 {
+	// Finns en todo i bookingprocessor också
+
+	// Prio:
+    /*
+	* (x)RentVehicle/Rent metod
+	* (x)ReturnVehicle/Return metod
+	* Rent-knapp vid bilarna - asynkron metod som fake'ar processing( task.delay(sekunder?) ) - ändra status på vehiclestatus - lägg till i booking
+	* (x)Distance knapp med return efter att bilen är hyrd (ändra return odometer till nya) - ändra till closed i booking
+	* Vehicle klass - Car/Motorcycle ärver - metoderns läggs i vehicle
+	* om man försöker lägga till fordon/kund utan rätt info så ska man skicka felmeddelande "could not add vehicle/could not add customer"
+	* ^ samma med rent/return knapparna
+	*/
+
+
+
+
+	/* Todo:
+	 * (X)Customers och Bookings behöver ID property
+	 * Try/catch där de passar med error meddelande
+	 * Exceptions
+	 * regex för inputs av t.ex regnr? -- Kolla videostore uppgiften
+	 * */
+
+	/* * Todo:
+	 * 
+	*
+	* Get-Persons-Bookings-Vehicles får inte finnas. Måste vara generiska. En Get metod där man skickar in ett lambda uttryck i parantesen för att filtrera data
+	* t.ex Hämta alla personer vars namn är John eller hämta alla bilar med en viss vehicletype
+	* Get metoden ska hämta en lista på allt som matchar.
+	* Single metod ska hämta EN sak (t.ex person via personnr eller en bil via regnr)
+	*
+	* en Add metod där man kan lägga till person/bokning/fordon
+	*
+	* Get - returnerar lista med lambda uttryck (filter)
+	* Single - returnerar EN sak med lambra uttryck (filter)
+	* Add - lägger till valfri (person, bil, booking)
+	*/
+
+	/* Todo:
+	 * Extensionmetoder - VehicleExtensions och CollectionExtensions
+	 * 
+	 */
 
 }

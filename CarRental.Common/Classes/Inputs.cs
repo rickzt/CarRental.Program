@@ -12,6 +12,9 @@ namespace CarRental.Common.Classes;
 public class Inputs
 {
 
+	public int customerId { get; set; }
+	public int? Distance { get; set; }
+	public bool Rented { get; set; } = false;
 	public string RegNo { get; set; } = string.Empty;
 	public string Make { get; set; } = string.Empty;
 	public int? Odometer { get; set; } = null;
@@ -26,6 +29,7 @@ public class Inputs
 	public string LastName { get; set; }
 
 	public string Testmessage { get; set; } = string.Empty;
+	public string ErrorMessage { get; set; } = string.Empty;
 
 
 
@@ -35,14 +39,14 @@ public class Inputs
 		{
 			if (VehicleType == VehicleTypes.Motorcycle)
 			{
-				// FIXA ID!!
+				// FIXA ID!! och cost/day
 				var vehicle = new Motorcycle(0, RegNo, Make, Odometer, (double)CostKm, 150, VehicleStatuses);
 				RegNo = string.Empty; Make = string.Empty; Odometer = null; CostKm = null; VehicleType = null;
 				return vehicle;
 			}
 			else
 			{
-				// FIXA ID!!
+				// FIXA ID!! och cost/day
 				var vehicle = new Car(0, RegNo, Make, (int)Odometer, (double)CostKm, (VehicleTypes)VehicleType, 150, VehicleStatuses);
 				RegNo = string.Empty; Make = string.Empty; Odometer = null; CostKm = null; VehicleType = null;
 				return vehicle;
@@ -64,7 +68,7 @@ public class Inputs
 		}
 		else
 			Testmessage = "didnt work";
-			return null;
+		return null;
 	}
 	public void NullButtons()
 	{
@@ -74,5 +78,9 @@ public class Inputs
 		CostKm = null;
 		VehicleType = null;
 		CostDay = null;
+	}
+	public void rentedtest()
+	{
+		Rented = true;
 	}
 }

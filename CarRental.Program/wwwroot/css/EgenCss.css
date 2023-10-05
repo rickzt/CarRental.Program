@@ -53,3 +53,6 @@
 .container-cus{
     max-width: 75% !important;
 }
+.input-min75{
+    min-width: 100px !important;
+}
