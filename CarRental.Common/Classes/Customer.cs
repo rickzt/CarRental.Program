@@ -23,5 +23,12 @@ namespace CarRental.Common.Classes
 			this.LastName = lastName;
 			this.FirstName = firstName;
 		}
+		public Customer(int id, IPerson person)
+		{
+			Id = id;
+			Ssn = person.Ssn;
+			LastName = person.LastName;
+			FirstName = person.FirstName;
+		}
 	}
 }

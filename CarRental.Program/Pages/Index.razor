@@ -20,8 +20,9 @@
 
 @if(input.ErrorMessage.Length > 0)
 {
-<p><div class="alert alert-danger" role="alert">
-  @input.Testmessage</div></p>
+<p><div class="w25 alert alert-danger" role="alert">
+  @input.ErrorMessage</div></p>
+
 <p>@input.Testmessage</p>
 }
 <br />
@@ -44,7 +45,7 @@
 			<tr>
 				<td class="w13"><input class="w50 form-control" placeholder="RegNo" @bind="input.RegNo" /></td>
 				<td class="w13"><input class="w50 form-control" placeholder="Make" @bind="input.Make" /></td>
-				<td class="w18"><input class="w50 form-control" placeholder="Odometer" type="number" @bind="input.Odometer" /></td>
+				<td class="w18"><input class="w50 input-min125 form-control" placeholder="Odometer" type="number" @bind="input.Odometer" /></td>
 				<td class="w13"><input class="w50 form-control" placeholder="$/Km" type="number" @bind="input.CostKm" /></td>
 				<td class="w50">
 				<select class="form-control" @bind="input.VehicleType">
@@ -52,9 +53,9 @@
 					@foreach(var vt in Enum.GetNames(typeof(VehicleTypes))){<option value="@vt">@vt</option>}
 				</select>
 				</td>
-				<td class="w100"><input class="w100 input-min75 form-control" placeholder="$/Day" type="number" @bind="input.CostDay"/></td>
-				<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.AddNewVehicleButton(input, default))">Add</button></td>
-				<td>Status</td>
+				<td class="w100"><input class="w100 input-min100 form-control" placeholder="$/Day" type="number" @bind="input.CostDay"/></td>
+				<td class="align-middle"><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.AddNewVehicleButton(input, default))">Add</button></td>
+				<td class="align-middle">Status</td>
 			</tr>
 			@foreach (var v in bp.GetVehicles(input.filteredStatuses)) 
 			{
@@ -70,23 +71,24 @@
 					{
 					<td>
 						<select @bind="input.customerId">
-							<option value="Test" disabled selected hidden>Rent</option>
+							<option value="Test" disabled selected hidden></option>
 							@foreach (var customer in bp.GetCustomers())
 							{
 								<option value="@customer.Id">@customer.FirstName @customer.LastName</option>
 							}
 						</select>
 					</td>
-					<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>{bp.RentVehicle(v.Id, input.customerId); input.rentedtest(); input.Distance=null;})">Rent</button></td>
+						@if (input.customerId != null)
+						{<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>{bp.RentVehicle(v.Id, (int)input.customerId); input.rentedtest(); input.Distance=null;})">Rent</button></td>}
+						else
+						{<td><button type="button" class="btn btn-sm btn-outline-primary" disabled>Rent</button></td>}
 					}
 					else
 					{
 					<td><input class="form-control" placeholder="Distance" size="15" @bind="input.Distance"/></td>
-					<td><span>
-							<button size="15" type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.ReturnVehicle(v.Id, input.Distance ?? 0))">Return</button>
-					</span></td>
+						<td class="align-middle"><button size="15" type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.ReturnVehicle(v.Id, input.Distance ?? 0))">Return</button></td>
 					}
-				<td><span class="badge bg-@((v.VehicleStatuses == VehicleStatuses.Available) ? "primary" : "danger")">@v.VehicleStatuses</span></td>
+					<td class="align-middle"><span class="badge bg-@((v.VehicleStatuses == VehicleStatuses.Available) ? "primary" : "danger")">@v.VehicleStatuses</span></td>
 			</tr>
 			}
 		</tbody>
@@ -142,13 +144,14 @@
 			<tr>
 				<td><input placeholder="SSN" type="number" @bind="input.Ssn" /></td>
 				<td><input placeholder="First name" @bind="input.FirstName" /></td>
-				<td><input class="w75" placeholder="Last name" @bind="input.LastName"/>   <span><button button type="button" class="btn btn-primary btn-sm" @onclick="(()=>bp.AddNewCustomerButton(input))">+</button></span></td>
+				<td><input class="w75" placeholder="Last name" @bind="input.LastName"/>   <span><button button type="button" class="btn btn-primary btn-sm" @onclick="(()=>bp.AddNewCustomerButton(input, default))">+</button></span></td>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var customer in bp.GetCustomers())
 			{
 				<tr class="text text:hover">
+					<td>@customer.Id</td>
 					<td>@customer.Ssn</td>
 					<td>@customer.LastName</td>
 					<td>@customer.FirstName</td>

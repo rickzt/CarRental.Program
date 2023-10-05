@@ -54,5 +54,11 @@
     max-width: 75% !important;
 }
 .input-min75{
+    min-width: 75px !important;
+}
+.input-min100 {
     min-width: 100px !important;
+}
+.input-min125 {
+    min-width: 125px !important;
 }

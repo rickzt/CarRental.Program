@@ -69,12 +69,14 @@ namespace CarRental.Business.Classes
             else
                 input.NullButtons();
 		}
-        public void AddNewCustomerButton(Inputs input)
+        public void AddNewCustomerButton(Inputs input, IPerson? customer)
         {
-            var newC = input.AddNewCustomer();
-            if (newC != null)
+            customer = input.AddNewCustomer();
+			var id = _db.GetPersons().Max(x => x.Id) + 1;
+			if (customer != null)
             {
-                _db.AddNewCustomer(newC);
+                var newCustomer = new Customer(id, customer);
+                _db.AddNewCustomer(newCustomer);
                 input.NullButtons();
             }
             else
