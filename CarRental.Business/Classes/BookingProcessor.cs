@@ -11,6 +11,7 @@ using CarRental.Data.Interfaces;
 using CarRental.Data.Classes;
 using CarRental.Common.Classes;
 using System.Collections;
+using System.Linq.Expressions;
 
 namespace CarRental.Business.Classes
 {
@@ -22,19 +23,25 @@ namespace CarRental.Business.Classes
         {
             _db = db;
         }
-        public IEnumerable<Customer> GetCustomers()
-		{
-            var customerList = _db.GetPersons().Where(x => x is Customer).Cast<Customer>().ToList();
-			return customerList;
-		}
         public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default)
         {
-
-            return _db.GetVehicles(status);
+            if (status == default)
+            {
+			    return _db.Get<IVehicle>(null); 
+            }
+            else
+                return _db.Get<IVehicle>(a => a.VehicleStatuses == status);
+            //return _db.GetVehicles(status);
+		}
+        public IEnumerable<Customer> GetCustomers()
+		{
+			var customerList = _db.Get<IPerson>(null).Cast<Customer>().ToList();
+			return customerList;
 		}
 		public IEnumerable<IBooking> GetBookings()
         {
-            return _db.GetBookings();
+            return _db.Get<IBooking>(null);
+            //return _db.GetBookings();
 		}
 /*        public async Task<IBooking> RentVehicleASYNC(int vehicleId, int customerId)
          {
@@ -44,62 +51,86 @@ namespace CarRental.Business.Classes
          }*/
 		public IBooking RentVehicle(int vehicleId, int customerId)
 		{
+
 			return _db.RentVehicle(vehicleId, customerId);
 		}
-		public IBooking ReturnVehicle(int vehicleId, int? distance)
+		public IBooking ReturnVehicle(int vehicleId, double? distance)
         {
-            return _db.ReturnVehicle(vehicleId, distance);
+            var distRounded = Math.Ceiling((decimal)distance);
+		    return _db.ReturnVehicle(vehicleId, (double)distRounded);       
         }
-		public void AddNewVehicleButton(Inputs input, IVehicle? vehicle)
+        public void AddVehicle(Inputs input, IVehicle? vehicle)
         {
+
             vehicle = input.AddNewVehicle();
-            // Metod för assignID istället?
-            var id = _db.GetVehicles().Max(x => x.Id) + 1;
-            if (vehicle?.GetVehicleTypes() == VehicleTypes.Motorcycle && vehicle != null)
+            if (vehicle != null)
             {
-                var newVehicle = new Motorcycle(id, vehicle);
-				_db.AddNewVehicle(newVehicle);
-			}
-			else if (vehicle?.GetVehicleTypes() != VehicleTypes.Motorcycle && vehicle != null)
+                _db.Add(vehicle);
+                input.NullButtons();
+            }
+            else
+                input.NullButtons();
+        }
+        public void AddCustomer(Inputs input, IPerson? person)
+        {
+            person = input.AddNewCustomer();
+            if (person != null)
             {
-				var newVehicle = new Motorcycle(id, vehicle);
-				_db.AddNewVehicle(newVehicle);
+                _db.Add(person);
                 input.NullButtons();
             }
             else
                 input.NullButtons();
 		}
-        public void AddNewCustomerButton(Inputs input, IPerson? customer)
+		// ------------ // Används ej 
+		public IVehicle? GetVehicle(int vehicleId)
         {
-            customer = input.AddNewCustomer();
-			var id = _db.GetPersons().Max(x => x.Id) + 1;
-			if (customer != null)
-            {
-                var newCustomer = new Customer(id, customer);
-                _db.AddNewCustomer(newCustomer);
-                input.NullButtons();
-            }
-            else
-                input.NullButtons();
+            return _db.Single<IVehicle>(i => i.Id == vehicleId);
         }
+		public IVehicle? GetVehicle(string regNo)
+        {
+            return _db.Single<IVehicle>(r=>r.RegNr == regNo);
+        }
+        public IPerson? GetPerson(string ssn)
+        {
+            return _db.Single<IPerson>(s => s.Ssn.ToString() == ssn);
+        }
+		public IBooking GetBooking(Inputs input, int vehicleId)
+        {
+            try
+            {
+            return _db.Single<IBooking>(v => v.Id == vehicleId);
+            }
+            catch (Exception ex) 
+            {
+                input.ErrorMessage = ex.Message;
+                throw ex;
+            }
+        }
+/*		public string[] VehicleStatusNames => _db.VehicleStatusNames();
+		public string[] VehicleTypeNames => _db.VehicleTypeNames();
+		public VehicleTypes GetVehicleType(string name) => _db.GetVehicleType(name);*/
+
+
+
+
+
+
 		/* Metoder som ska finnas i bp - troligtvis med lambda uttryck
          * 
-         * IENumerable<IBooking> GetBookings()
-         * IBooking GetBooking(int vehicleId) - Finns inte i PDF'en
-         * IEnumerable<Customer> GetCustomers()
-         * IPerson? GetPerson(string ssn)
-         * IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default)
-         * IVehicle? GetVehicle(int vehicleId)
-         * IVehicle? GetVehicle(string regNo)
+         * (x)IENumerable<IBooking> GetBookings()
+         * (x)IBooking GetBooking(int vehicleId) - Finns inte i PDF'en
+         * (x) IEnumerable<Customer> GetCustomers()
+         * (x)IPerson? GetPerson(string ssn)
+         * (x)IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default)
+         * (x)IVehicle? GetVehicle(int vehicleId)
+         * (x)IVehicle? GetVehicle(string regNo)
          * async Task<IBooking> RentVehicle(int vehicleId, int customerId)
          * {
          * }
-         * IBooking ReturnVehicle(int vehicleId, double distance) 
-         * void AddVehicle(string make, string regNo, double odometer, double costkm, vehiclestatuses status, vehicletypes type)
-         * void AddCustomer(string ssn, string firstname, string lastname)
+         * (x)IBooking ReturnVehicle(int vehicleId, double distance) 
+         * (x)void AddVehicle(string make, string regNo, double odometer, double costkm, vehiclestatuses status, vehicletypes type)
+         * (x)void AddCustomer(string ssn, string firstname, string lastname)
          */
-		public string[] VehicleStatusNames => _db.VehicleStatusNames();
-		public string[] VehicleTypeNames => _db.VehicleTypeNames();
-		public VehicleTypes GetVehicleType(string name) => _db.GetVehicleType(name);
 	}
 }

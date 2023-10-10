@@ -13,13 +13,13 @@ public class Inputs
 {
 
 	public int? customerId { get; set; }
-	public int? Distance { get; set; }
+	public double? Distance { get; set; }
 	public bool Rented { get; set; } = false;
 	public string RegNo { get; set; } = string.Empty;
 	public string Make { get; set; } = string.Empty;
 	public int? Odometer { get; set; } = null;
 	public double? CostKm { get; set; } = null;
-	public Customer Customer { get; set; }
+	public Customer? Customer { get; set; }
 	public int? CostDay { get; set; } = null;
 	public VehicleTypes? VehicleType = default;
 	public VehicleStatuses VehicleStatuses = VehicleStatuses.Available;
@@ -48,7 +48,7 @@ public class Inputs
 			{
 				if (VehicleType == VehicleTypes.Motorcycle)
 				{
-					// FIXA ID!! och cost/day
+					// FIXA ID!! och cost/day - Lägg till null id?
 					var vehicle = new Motorcycle(0, RegNo, Make, Odometer, (double)CostKm, 150, VehicleStatuses);
 					RegNo = string.Empty; Make = string.Empty; Odometer = null; CostKm = null; VehicleType = null;
 					ErrorMessage = string.Empty;
@@ -76,10 +76,10 @@ public class Inputs
 	{
 		try
 		{
+			ErrorMessage = string.Empty;
 			if (Ssn.Equals(0) || Ssn == null) throw new ArgumentException("Must enter a SSN");
 			if (FirstName.Length.Equals(0) || FirstName == null) throw new ArgumentException("Must enter a first name");
 			if (LastName.Length.Equals(0) || LastName == null) throw new ArgumentException("Must enter a last name");
-
 			var customer = new Customer(Ssn, FirstName, LastName);
 			return customer;
 		}
@@ -98,10 +98,10 @@ public class Inputs
 		VehicleType = null;
 		CostDay = null;
 		Ssn = null;
-		FirstName = null;
-		LastName = null;
+		FirstName = string.Empty;
+		LastName = string.Empty;
 	}
-	public void rentedtest()
+	public void RentedStatus()
 	{
 		Rented = true;
 	}

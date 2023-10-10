@@ -7,9 +7,9 @@ namespace CarRental.Data.Interfaces;
 
 public interface IData
 {
-	IEnumerable<IPerson> GetPersons(); // Hämta personer
+/*	IEnumerable<IPerson> GetPersons(); // Hämta personer
 	IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default); // Ta reda på om bilen är bokad eller inte
-	IEnumerable<IBooking> GetBookings();  
+	IEnumerable<IBooking> GetBookings();  */
 
 	List<T> Get<T>(Expression<Func<T, bool>> expression);
 	T? Single<T>(Expression<Func<T, bool>> expression);
@@ -20,11 +20,11 @@ public interface IData
 	int NextPersonId { get; }
 
 	IBooking RentVehicle(int vehicleId, int customerId);
-	IBooking ReturnVehicle(int vehicleId, int? distance);
+	IBooking ReturnVehicle(int vehicleId, double? distance);
 
-	public string[] VehicleStatusNames();
+/*	public string[] VehicleStatusNames();
 	public string[] VehicleTypeNames();
-	public VehicleTypes GetVehicleType(string name);
+	public VehicleTypes GetVehicleType(string name);*/
 
 
 	// DEN GENERISKA GET - SÖK UPP REFLECTION 
@@ -38,6 +38,6 @@ public interface IData
 	//IVehicle GetVehicle(int id);
 
 
-	void AddNewVehicle(IVehicle v);
-	void AddNewCustomer(IPerson v);
+/*	void AddNewVehicle(IVehicle v);
+	void AddNewCustomer(IPerson v);*/
 }

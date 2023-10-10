@@ -16,8 +16,6 @@
 	<button type="button" class="btn btn-outline-danger" @onclick="(()=>input.filteredStatuses=VehicleStatuses.Booked)">Booked</button>
 </div>
 
-<button type="button" class="btn btn-outline-danger" @onclick="(()=>bp.AddNewVehicleButton(input, default))">TestAdd</button>
-
 @if(input.ErrorMessage.Length > 0)
 {
 <p><div class="w25 alert alert-danger" role="alert">
@@ -54,7 +52,7 @@
 				</select>
 				</td>
 				<td class="w100"><input class="w100 input-min100 form-control" placeholder="$/Day" type="number" @bind="input.CostDay"/></td>
-				<td class="align-middle"><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.AddNewVehicleButton(input, default))">Add</button></td>
+				<td class="align-middle"><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.AddVehicle(input, default))">Add</button></td>
 				<td class="align-middle">Status</td>
 			</tr>
 			@foreach (var v in bp.GetVehicles(input.filteredStatuses)) 
@@ -69,7 +67,7 @@
 					<td>$@v.CostDay</td>
 					@if (v.VehicleStatuses == VehicleStatuses.Available)
 					{
-					<td>
+						<td class="align-middle">
 						<select @bind="input.customerId">
 							<option value="Test" disabled selected hidden></option>
 							@foreach (var customer in bp.GetCustomers())
@@ -79,13 +77,14 @@
 						</select>
 					</td>
 						@if (input.customerId != null)
-						{<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>{bp.RentVehicle(v.Id, (int)input.customerId); input.rentedtest(); input.Distance=null;})">Rent</button></td>}
+						{<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>{bp.RentVehicle(v.Id, (int)input.customerId); input.RentedStatus(); input.Distance=null;})">Rent</button></td>}
 						else
 						{<td><button type="button" class="btn btn-sm btn-outline-primary" disabled>Rent</button></td>}
 					}
 					else
 					{
-					<td><input class="form-control" placeholder="Distance" size="15" @bind="input.Distance"/></td>
+						<td><input class="form-control" placeholder="Distance" type="number" inputmode="numeric" size="15" @bind="input.Distance"/></td>
+						@*<td><input class="form-control" placeholder="Distance" type="number" inputmode="numeric" size="15" @bind="input.Distance" /></td>*@
 						<td class="align-middle"><button size="15" type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.ReturnVehicle(v.Id, input.Distance ?? 0))">Return</button></td>
 					}
 					<td class="align-middle"><span class="badge bg-@((v.VehicleStatuses == VehicleStatuses.Available) ? "primary" : "danger")">@v.VehicleStatuses</span></td>
@@ -144,14 +143,14 @@
 			<tr>
 				<td><input placeholder="SSN" type="number" @bind="input.Ssn" /></td>
 				<td><input placeholder="First name" @bind="input.FirstName" /></td>
-				<td><input class="w75" placeholder="Last name" @bind="input.LastName"/>   <span><button button type="button" class="btn btn-primary btn-sm" @onclick="(()=>bp.AddNewCustomerButton(input, default))">+</button></span></td>
+				<td><input class="w75" placeholder="Last name" @bind="input.LastName" />   <span><button button type="button" class="btn btn-primary btn-sm" @onclick="(()=>bp.AddCustomer(input, default))">+</button></span></td>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var customer in bp.GetCustomers())
 			{
 				<tr class="text text:hover">
-					<td>@customer.Id</td>
+					@*<td>@customer.Id</td>*@
 					<td>@customer.Ssn</td>
 					<td>@customer.LastName</td>
 					<td>@customer.FirstName</td>
@@ -160,6 +159,9 @@
 		</tbody>
 	</table>
 </div>
+<p>@bp.GetBooking(default, 2).Id</p>
+<p>@bp.GetBooking(default, 2).RegNr</p>
+<p>@bp.GetBooking(default, 3).RegNr</p>
 
 @code 
 {
@@ -167,13 +169,16 @@
 
 	// Prio:
     /*
+	 * Exceptions vartdå? (bp, collectiondata?)
 	* (x)RentVehicle/Rent metod
 	* (x)ReturnVehicle/Return metod
+	* (x)Lägg till parse? kanske inte behövs - för int/double inputs - var mass = double.Parse(newMass)
 	* Rent-knapp vid bilarna - asynkron metod som fake'ar processing( task.delay(sekunder?) ) - ändra status på vehiclestatus - lägg till i booking
 	* (x)Distance knapp med return efter att bilen är hyrd (ändra return odometer till nya) - ändra till closed i booking
+	* (x) - går att lägga till nr nu - LÄGG TILL SÅ MAN BARA KAN LÄGGA TILL NR I DISTANCE VID RETUR
 	* Vehicle klass - Car/Motorcycle ärver - metoderns läggs i vehicle
-	* om man försöker lägga till fordon/kund utan rätt info så ska man skicka felmeddelande "could not add vehicle/could not add customer"
-	* ^ samma med rent/return knapparna
+	* (x)om man försöker lägga till fordon/kund utan rätt info så ska man skicka felmeddelande "could not add vehicle/could not add customer"
+	* (x)^ samma med rent/return knapparna
 	*/
 
 
@@ -182,7 +187,6 @@
 	/* Todo:
 	 * (X)Customers och Bookings behöver ID property
 	 * Try/catch där de passar med error meddelande
-	 * Exceptions
 	 * regex för inputs av t.ex regnr? -- Kolla videostore uppgiften
 	 * */
 

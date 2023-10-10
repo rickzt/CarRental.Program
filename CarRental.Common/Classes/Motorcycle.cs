@@ -15,7 +15,7 @@ public class Motorcycle : IVehicle
 	public VehicleStatuses VehicleStatuses { get; set; }
 
 
-	public Motorcycle(int id, string regNr, string maker, int? odometer, double? costKm, int costDay, VehicleStatuses vehicleStatuses)
+	public Motorcycle(int id, string regNr, string maker, int? odometer, double? costKm, int? costDay, VehicleStatuses vehicleStatuses)
 	{
 		this.Id = id;
 		this.RegNr = regNr;

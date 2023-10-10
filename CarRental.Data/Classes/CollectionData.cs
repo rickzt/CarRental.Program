@@ -5,6 +5,13 @@ using CarRental.Common.Interfaces;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System;
+using System.Text.RegularExpressions;
+using System.Runtime.ConstrainedExecution;
+using System.Data;
+using System.Reflection;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace CarRental.Data.Classes
 {
@@ -13,6 +20,7 @@ namespace CarRental.Data.Classes
 		readonly List<IPerson> _persons = new List<IPerson>();
 		readonly List<IVehicle> _vehicles = new List<IVehicle>();
 		readonly List<IBooking> _bookings = new List<IBooking>();
+		
 
 		// Ids - från video - Customer och Bookings behöver ID properties
 		public int NextVehicleId => _vehicles.Count.Equals(0) ? 1 : _vehicles.Max(g => g.Id) + 1;
@@ -22,16 +30,104 @@ namespace CarRental.Data.Classes
 
 		public List<T> Get<T>(Expression<Func<T, bool>> expression)
 		{
-			return default;
+
+			try
+			{
+				FieldInfo[] fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+				foreach (var field in fields)
+				{
+					if (field.FieldType == typeof(List<T>))
+					{
+						var list = (List<T>)field.GetValue(this);
+						if (list != null)
+						{
+							if (expression == null || expression == default)
+							{
+								return list;
+							}
+							else
+							return list.Where(expression.Compile()).ToList();
+						}
+						throw new ArgumentNullException(field.Name);
+					}
+				}
+				throw new Exception();
+
+			}
+			catch (Exception ex)
+			{
+				throw new Exception();
+			}
+			/*if (typeof(T) == typeof(IPerson))
+			{
+				return _persons.Cast<T>().Where(expression.Compile()).ToList();
+			}*/
 		}
 		public T? Single<T>(Expression<Func<T, bool>> expression)
 		{
-			return default;
+			try
+			{
+				FieldInfo[] fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+				foreach (var field in fields)
+				{
+					if (field.FieldType == typeof(List<T>))
+					{
+						var list = (List<T>)field.GetValue(this);
+						if (list != null)
+						{
+							if (expression == null || expression == default)
+							{
+								throw new ArgumentNullException(field.Name);
+							}
+							else
+								return list.Single(expression.Compile());
+						}
+						throw new ArgumentNullException(field.Name);
+					}
+				}
+				throw new Exception();
+
+			}
+			catch (Exception ex)
+			{
+				throw new Exception();
+			}
 		}
 		public void Add<T>(T item)
 		{
+			if (item == null) throw new ArgumentNullException("No item found");
+			if (item is IPerson)
+			{
+				var test = (IPerson)item;
+				var cus = new Customer(NextPersonId, test.Ssn, test.FirstName, test.LastName);
+				_persons.Add(cus);
+			}
+			if (item is IBooking)
+			{
+				var test = (IBooking)item;
+				test.Id = NextBookingId;
+				_bookings.Add(test);
+			}
+			if (item is IVehicle)
+			{
+				var test = (IVehicle)item;
 
+				if (test.GetVehicleTypes() == VehicleTypes.Motorcycle)
+				{
+					var mc = new Motorcycle(NextVehicleId, test.RegNr, test.Maker, test.Odometer, (double)test.CostKm, test.CostDay, VehicleStatuses.Available);
+					_vehicles.Add(mc);
+				}
+				else
+				{
+					var car = new Car(NextVehicleId, test.RegNr, test.Maker, (int)test.Odometer, (double)test.CostKm, test.GetVehicleTypes(), test.CostDay, VehicleStatuses.Available);
+					_vehicles.Add(car);
+				}
+
+			}
 		}
+
 		public IBooking RentVehicle(int vehicleId, int customerId)
 		{
 			var vehicle = _vehicles.Single(i => i.Id == vehicleId);
@@ -45,22 +141,19 @@ namespace CarRental.Data.Classes
 
 		}
 
-		public IBooking ReturnVehicle(int vehicleId, int? distance)
+		public IBooking ReturnVehicle(int vehicleId, double? distance)
 		{
             var vehicle = _vehicles.Single(y => y.Id == vehicleId);
 			vehicle.VehicleStatuses = VehicleStatuses.Available;
 
 		    var newOdometer = vehicle.Odometer + distance;
-			vehicle.Odometer = newOdometer;
+			vehicle.Odometer = (int?)newOdometer;
 
 			var booking = _bookings.Single(i => i.Vehicle.Id == vehicleId && i.RentedStatus == VehicleStatuses.Booked);
 
-			booking.OdometerReturn = newOdometer;
+			booking.OdometerReturn = (int?)newOdometer;
             booking.RentedStatus = VehicleStatuses.Available;
 			booking.DateReturned = DateTime.Today;
-
-			//var booking = _bookings.Single(x=> x.Vehicle == vehicle);
-			//booking.OdometerReturn = cost;
 
 			return booking;
 		}
@@ -93,24 +186,6 @@ namespace CarRental.Data.Classes
 			_bookings.Add(new Booking(NextBookingId, _vehicles[3], _persons[2], 2502, new DateTime(2023, 09, 25), DateTime.Today, VehicleStatuses.Available));
 		}
 
-
-
-
-		//_bookings.Add(new Booking(new Car("LGA251", null, 1, null), "Johan Enkvist (185235)", 10000, new DateTime(2011, 02, 02), null, BookingStatuses.Open)); ;
-		//_bookings.Add(new Booking(new Car("PGE501", 175, 2, 5500), "Anna Andersson (292452)", 5000,  new DateTime(2011, 02, 15), new DateTime(2011, 03, 03),  BookingStatuses.Closed));
-		//_bookings.Add(new Booking(new Car("GKA812", 175, 1.5, 5251), "Johan Åkesson (526737)", 5000, new DateTime(2011, 02, 07), new DateTime(2011, 02, 23),  BookingStatuses.Closed));
-		//_bookings.Add(new Booking(new Car("GAJ285", 185, 2.3, 2401),"Greger Svantesson (563472)", 2312, new DateTime(2011, 01, 02), new DateTime(2011, 01, 15), BookingStatuses.Closed));
-
-		// Nullarna på Johan ändras vid return.
-		//_bookings.Add(new Booking(new Car(6, "LGA251", "Ford", null, 1, VehicleTypes.Sedan, 150, VehicleStatuses.Booked), new Customer(185235, "Enkvist", "Johan"), 10000, new DateTime(2011, 02, 02), null, BookingStatuses.Open));
-		//_bookings.Add(new Booking(new Car(7, "PGE501", "Volvo", 5500, 2, VehicleTypes.Combi, 175, VehicleStatuses.Booked), new Customer(292452, "Andersson", "Anna"), 5000, new DateTime(2011, 02, 02), DateTime.Today, BookingStatuses.Open));
-
-
-
-
-
-
-
 		/* * Todo:
 		 * RentVehicle/Rent metod
 		 * ReturnVehicle/Return metod
@@ -127,7 +202,7 @@ namespace CarRental.Data.Classes
 		 * Add - lägger till valfri (person, bil, booking) 
 		*/
 
-
+/*
 		public IEnumerable<IPerson> GetPersons() => _persons;
 		public IEnumerable<IBooking> GetBookings() => _bookings;
 		public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => 
@@ -140,6 +215,7 @@ namespace CarRental.Data.Classes
 		{
 			_persons.Add(v);
 		}
+*/
 
 	}
 }
