@@ -8,9 +8,9 @@ namespace CarRental.Common.Extensions;
 
 public static class VehicleExtensions
 {
-	public static int Duration(this DateTime startDate, DateTime endDate)
+	public static double? Duration(this DateTime startDate, DateTime? endDate)
 	{
-		var duration = (int)(endDate - startDate).TotalDays;
+		var duration = (endDate - startDate)?.TotalDays;
 		return duration;
 	}
 }

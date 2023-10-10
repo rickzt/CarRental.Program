@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Runtime.ConstrainedExecution;
 using System.Data;
 using System.Reflection;
+using CarRental.Common.Extensions;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
@@ -18,19 +19,16 @@ namespace CarRental.Data.Classes
 	public class CollectionData : IData
 	{
 		readonly List<IPerson> _persons = new List<IPerson>();
-		readonly List<IVehicle> _vehicles = new List<IVehicle>();
+		readonly List<Vehicle> _vehicles = new List<Vehicle>();
 		readonly List<IBooking> _bookings = new List<IBooking>();
 		
-
-		// Ids - från video - Customer och Bookings behöver ID properties
-		public int NextVehicleId => _vehicles.Count.Equals(0) ? 1 : _vehicles.Max(g => g.Id) + 1;
+		public int NextVehicleId => (int)(_vehicles.Count.Equals(0) ? 1 : _vehicles.Max(g => g.Id) + 1);
 		public int NextPersonId => _persons.Count.Equals(0) ? 1 : _persons.Max(g => g.Id) + 1;
 		public int NextBookingId => _bookings.Count.Equals(0) ? 1 : _bookings.Max(g => g.Id) + 1;
 
 
 		public List<T> Get<T>(Expression<Func<T, bool>> expression)
 		{
-
 			try
 			{
 				FieldInfo[] fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
@@ -63,6 +61,7 @@ namespace CarRental.Data.Classes
 			{
 				return _persons.Cast<T>().Where(expression.Compile()).ToList();
 			}*/
+
 		}
 		public T? Single<T>(Expression<Func<T, bool>> expression)
 		{
@@ -97,48 +96,44 @@ namespace CarRental.Data.Classes
 		}
 		public void Add<T>(T item)
 		{
-			if (item == null) throw new ArgumentNullException("No item found");
-			if (item is IPerson)
+			try
 			{
-				var test = (IPerson)item;
-				var cus = new Customer(NextPersonId, test.Ssn, test.FirstName, test.LastName);
-				_persons.Add(cus);
-			}
-			if (item is IBooking)
-			{
-				var test = (IBooking)item;
-				test.Id = NextBookingId;
-				_bookings.Add(test);
-			}
-			if (item is IVehicle)
-			{
-				var test = (IVehicle)item;
+				FieldInfo[] fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
 
-				if (test.GetVehicleTypes() == VehicleTypes.Motorcycle)
+				foreach (var field in fields)
 				{
-					var mc = new Motorcycle(NextVehicleId, test.RegNr, test.Maker, test.Odometer, (double)test.CostKm, test.CostDay, VehicleStatuses.Available);
-					_vehicles.Add(mc);
+					if (field.FieldType == typeof(List<T>))
+					{
+						var list = (List<T>)field.GetValue(this);
+						if (list != null)
+						{
+							if (item == null)
+							{
+								throw new ArgumentNullException(field.Name);
+							}
+								list.Add(item);
+							break;
+						}
+					}
 				}
-				else
-				{
-					var car = new Car(NextVehicleId, test.RegNr, test.Maker, (int)test.Odometer, (double)test.CostKm, test.GetVehicleTypes(), test.CostDay, VehicleStatuses.Available);
-					_vehicles.Add(car);
-				}
-
+			}
+			catch (Exception ex)
+			{
+				throw new Exception();
 			}
 		}
 
 		public IBooking RentVehicle(int vehicleId, int customerId)
 		{
 			var vehicle = _vehicles.Single(i => i.Id == vehicleId);
+			vehicle.VehicleStatuses = vehicle.VehicleStatuses.ChangeStatus();
 			vehicle.VehicleStatuses = VehicleStatuses.Booked;
+
 
 			var customer = _persons.Single(i => i.Id == customerId);
 			var booking = new Booking(NextBookingId, vehicle, customer, null, DateTime.Today, null, VehicleStatuses.Booked);
 			_bookings.Add(booking);
 			return booking;
-
-
 		}
 
 		public IBooking ReturnVehicle(int vehicleId, double? distance)
@@ -149,19 +144,16 @@ namespace CarRental.Data.Classes
 		    var newOdometer = vehicle.Odometer + distance;
 			vehicle.Odometer = (int?)newOdometer;
 
-			var booking = _bookings.Single(i => i.Vehicle.Id == vehicleId && i.RentedStatus == VehicleStatuses.Booked);
+			var booking = _bookings.Single(i => i.Vehicle.Id == vehicleId && i.VehicleStatus == VehicleStatuses.Booked);
 
 			booking.OdometerReturn = (int?)newOdometer;
-            booking.RentedStatus = VehicleStatuses.Available;
+			//booking.RentedStatus = VehicleStatuses.Available;
+			
+			booking.VehicleStatus = booking.VehicleStatus.ChangeStatus();
 			booking.DateReturned = DateTime.Today;
 
 			return booking;
 		}
-
-		public string[] VehicleStatusNames() => Enum.GetNames(typeof(VehicleStatuses));
-		public string[] VehicleTypeNames() => Enum.GetNames(typeof(VehicleTypes));
-		public VehicleTypes GetVehicleType(string name) => (VehicleTypes)Enum.Parse(typeof(VehicleTypes), name);
-
 
 		public CollectionData() => SeedData();
 

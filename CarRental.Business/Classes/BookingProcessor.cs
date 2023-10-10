@@ -23,14 +23,14 @@ namespace CarRental.Business.Classes
         {
             _db = db;
         }
-        public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default)
+        public IEnumerable<Vehicle> GetVehicles(VehicleStatuses status = default)
         {
             if (status == default)
             {
-			    return _db.Get<IVehicle>(null); 
+			    return _db.Get<Vehicle>(null); 
             }
             else
-                return _db.Get<IVehicle>(a => a.VehicleStatuses == status);
+                return _db.Get<Vehicle>(a => a.VehicleStatuses == status);
             //return _db.GetVehicles(status);
 		}
         public IEnumerable<Customer> GetCustomers()
@@ -59,12 +59,12 @@ namespace CarRental.Business.Classes
             var distRounded = Math.Ceiling((decimal)distance);
 		    return _db.ReturnVehicle(vehicleId, (double)distRounded);       
         }
-        public void AddVehicle(Inputs input, IVehicle? vehicle)
+        public void AddVehicle(Inputs input, Vehicle? vehicle)
         {
-
             vehicle = input.AddNewVehicle();
             if (vehicle != null)
             {
+                vehicle.SetId(_db.NextVehicleId);
                 _db.Add(vehicle);
                 input.NullButtons();
             }
@@ -76,6 +76,7 @@ namespace CarRental.Business.Classes
             person = input.AddNewCustomer();
             if (person != null)
             {
+                person.Id = _db.NextPersonId;
                 _db.Add(person);
                 input.NullButtons();
             }
@@ -83,33 +84,22 @@ namespace CarRental.Business.Classes
                 input.NullButtons();
 		}
 		// ------------ // Används ej 
-		public IVehicle? GetVehicle(int vehicleId)
+		public Vehicle? GetVehicle(int vehicleId)
         {
-            return _db.Single<IVehicle>(i => i.Id == vehicleId);
+            return _db.Single<Vehicle>(i => i.Id == vehicleId);
         }
-		public IVehicle? GetVehicle(string regNo)
+		public Vehicle? GetVehicle(string regNo)
         {
-            return _db.Single<IVehicle>(r=>r.RegNr == regNo);
+            return _db.Single<Vehicle>(r=>r.RegNr == regNo);
         }
         public IPerson? GetPerson(string ssn)
         {
             return _db.Single<IPerson>(s => s.Ssn.ToString() == ssn);
         }
-		public IBooking GetBooking(Inputs input, int vehicleId)
+		public IBooking? GetBooking(int vehicleId)
         {
-            try
-            {
             return _db.Single<IBooking>(v => v.Id == vehicleId);
-            }
-            catch (Exception ex) 
-            {
-                input.ErrorMessage = ex.Message;
-                throw ex;
-            }
         }
-/*		public string[] VehicleStatusNames => _db.VehicleStatusNames();
-		public string[] VehicleTypeNames => _db.VehicleTypeNames();
-		public VehicleTypes GetVehicleType(string name) => _db.GetVehicleType(name);*/
 
 
 

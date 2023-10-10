@@ -33,7 +33,7 @@ public class Inputs
 
 
 
-	public IVehicle? AddNewVehicle()
+	public Vehicle AddNewVehicle()
 	{
 
 		try
@@ -49,7 +49,7 @@ public class Inputs
 				if (VehicleType == VehicleTypes.Motorcycle)
 				{
 					// FIXA ID!! och cost/day - Lägg till null id?
-					var vehicle = new Motorcycle(0, RegNo, Make, Odometer, (double)CostKm, 150, VehicleStatuses);
+					var vehicle = new Motorcycle(null, RegNo, Make, Odometer, (double)CostKm, 150, VehicleStatuses);
 					RegNo = string.Empty; Make = string.Empty; Odometer = null; CostKm = null; VehicleType = null;
 					ErrorMessage = string.Empty;
 					return vehicle;
@@ -57,7 +57,7 @@ public class Inputs
 				else
 				{
 					// FIXA ID!! och cost/day
-					var vehicle = new Car(0, RegNo, Make, (int)Odometer, (double)CostKm, (VehicleTypes)VehicleType, 150, VehicleStatuses);
+					var vehicle = new Car(null, RegNo, Make, (int)Odometer, (double)CostKm, (VehicleTypes)VehicleType, 150, VehicleStatuses);
 					RegNo = string.Empty; Make = string.Empty; Odometer = null; CostKm = null; VehicleType = null;
 					ErrorMessage = string.Empty;
 					return vehicle;

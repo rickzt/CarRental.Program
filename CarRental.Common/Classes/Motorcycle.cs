@@ -3,22 +3,14 @@ using CarRental.Common.Interfaces;
 
 namespace CarRental.Common.Classes;
 
-public class Motorcycle : IVehicle
+public class Motorcycle : Vehicle
 {
-	public int Id { get; private set; }
-	public string RegNr { get; init; }
-	public string Maker { get; init; }
-	public int? Odometer { get; set; }
-	public int? CostDay { get; set; }
-	public double? CostKm { get; set; }
-	public VehicleTypes VehicleTypes = VehicleTypes.Motorcycle;
-	public VehicleStatuses VehicleStatuses { get; set; }
+	public new VehicleTypes VehicleTypes = VehicleTypes.Motorcycle;
 
-
-	public Motorcycle(int id, string regNr, string maker, int? odometer, double? costKm, int? costDay, VehicleStatuses vehicleStatuses)
+	public Motorcycle(int? id, string regNr, string maker, int? odometer, double? costKm, int? costDay, VehicleStatuses vehicleStatuses)
 	{
-		this.Id = id;
-		this.RegNr = regNr;
+        SetId(id);
+        this.RegNr = regNr;
 		this.Maker = maker;
 		this.Odometer = odometer;
 		this.CostKm = costKm;
@@ -27,8 +19,8 @@ public class Motorcycle : IVehicle
 	}
 	public Motorcycle(int id, IVehicle motorcycle)
 	{
-		this.Id = id;
-		this.RegNr = motorcycle.RegNr;
+        SetId(id);
+        this.RegNr = motorcycle.RegNr;
 		this.Maker = motorcycle.Maker;
 		this.Odometer = motorcycle.Odometer;
 		this.CostKm = motorcycle.CostKm;
@@ -36,5 +28,4 @@ public class Motorcycle : IVehicle
 		this.CostDay = motorcycle.CostDay;
 		this.VehicleStatuses = motorcycle.VehicleStatuses;
 	}
-	public VehicleTypes GetVehicleTypes() { return VehicleTypes; }
 }

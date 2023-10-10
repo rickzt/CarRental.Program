@@ -58,7 +58,7 @@
 			@foreach (var v in bp.GetVehicles(input.filteredStatuses)) 
 			{
 				<tr class="text text:hover">
-					@*<td>@v.Id</td>*@
+					<td>@v.Id</td>
 					<td>@v.RegNr</td>
 					<td>@v.Maker</td>
 					<td>@v.Odometer</td>
@@ -77,7 +77,7 @@
 						</select>
 					</td>
 						@if (input.customerId != null)
-						{<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>{bp.RentVehicle(v.Id, (int)input.customerId); input.RentedStatus(); input.Distance=null;})">Rent</button></td>}
+						{<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>{bp.RentVehicle((int)v.Id, (int)input.customerId); input.RentedStatus(); input.Distance=null;})">Rent</button></td>}
 						else
 						{<td><button type="button" class="btn btn-sm btn-outline-primary" disabled>Rent</button></td>}
 					}
@@ -85,7 +85,7 @@
 					{
 						<td><input class="form-control" placeholder="Distance" type="number" inputmode="numeric" size="15" @bind="input.Distance"/></td>
 						@*<td><input class="form-control" placeholder="Distance" type="number" inputmode="numeric" size="15" @bind="input.Distance" /></td>*@
-						<td class="align-middle"><button size="15" type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.ReturnVehicle(v.Id, input.Distance ?? 0))">Return</button></td>
+						<td class="align-middle"><button size="15" type="button" class="btn btn-sm btn-outline-primary" @onclick="(()=>bp.ReturnVehicle((int)v.Id, input.Distance ?? 0))">Return</button></td>
 					}
 					<td class="align-middle"><span class="badge bg-@((v.VehicleStatuses == VehicleStatuses.Available) ? "primary" : "danger")">@v.VehicleStatuses</span></td>
 			</tr>
@@ -113,9 +113,8 @@
 			@foreach (var booking in bp.GetBookings())
 			{
 				<tr class="text text:hover">
-					@*
-					<td>@booking.Id</td>*@
-					@*<td>@booking.Vehicle.Id</td>*@
+					
+					<td>@booking.Id</td>
 					<td>@booking.RegNr</td>
 					<td>@booking.Customer.FirstName @booking.Customer.LastName (@booking.Customer.Ssn)</td>
 					<td>@booking.OdometerRent</td>
@@ -123,7 +122,7 @@
 					<td>@booking.DateRented.ToShortDateString()</td>
 					<td>@booking.DateReturned?.ToShortDateString()</td>
 					<td>@booking.GetCost()</td>
-					<td><span class="badge bg-@((booking.RentedStatus == VehicleStatuses.Booked) ? "danger" : "success")">@((booking.RentedStatus == VehicleStatuses.Booked) ? "Open" : "Closed")</span></td>
+					<td><span class="badge bg-@((booking.VehicleStatus == VehicleStatuses.Booked) ? "danger" : "success")">@((booking.VehicleStatus == VehicleStatuses.Booked) ? "Open" : "Closed")</span></td>
 				</tr>
 			}
 		</tbody>
@@ -159,9 +158,10 @@
 		</tbody>
 	</table>
 </div>
-<p>@bp.GetBooking(default, 2).Id</p>
-<p>@bp.GetBooking(default, 2).RegNr</p>
-<p>@bp.GetBooking(default, 3).RegNr</p>
+<p>@bp.GetBooking(2).Id</p>
+<p>@bp.GetBooking(2).RegNr</p>
+<p>@bp.GetBooking(3).RegNr</p>
+
 
 @code 
 {
