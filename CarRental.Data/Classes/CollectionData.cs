@@ -47,21 +47,15 @@ namespace CarRental.Data.Classes
 							else
 							return list.Where(expression.Compile()).ToList();
 						}
-						throw new ArgumentNullException(field.Name);
 					}
 				}
 				throw new Exception();
 
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				throw new Exception();
 			}
-			/*if (typeof(T) == typeof(IPerson))
-			{
-				return _persons.Cast<T>().Where(expression.Compile()).ToList();
-			}*/
-
 		}
 		public T? Single<T>(Expression<Func<T, bool>> expression)
 		{
@@ -89,7 +83,7 @@ namespace CarRental.Data.Classes
 				throw new Exception();
 
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				throw new Exception();
 			}
@@ -129,7 +123,6 @@ namespace CarRental.Data.Classes
 			vehicle.VehicleStatuses = vehicle.VehicleStatuses.ChangeStatus();
 			vehicle.VehicleStatuses = VehicleStatuses.Booked;
 
-
 			var customer = _persons.Single(i => i.Id == customerId);
 			var booking = new Booking(NextBookingId, vehicle, customer, null, DateTime.Today, null, VehicleStatuses.Booked);
 			_bookings.Add(booking);
@@ -146,9 +139,7 @@ namespace CarRental.Data.Classes
 
 			var booking = _bookings.Single(i => i.Vehicle.Id == vehicleId && i.VehicleStatus == VehicleStatuses.Booked);
 
-			booking.OdometerReturn = (int?)newOdometer;
-			//booking.RentedStatus = VehicleStatuses.Available;
-			
+			booking.OdometerReturn = (int?)newOdometer;			
 			booking.VehicleStatus = booking.VehicleStatus.ChangeStatus();
 			booking.DateReturned = DateTime.Today;
 
@@ -177,37 +168,5 @@ namespace CarRental.Data.Classes
 			_bookings.Add(new Booking(NextBookingId, _vehicles[1], _persons[1], 5051, new DateTime(2023, 09, 15), new DateTime(2023, 09, 27), VehicleStatuses.Available));
 			_bookings.Add(new Booking(NextBookingId, _vehicles[3], _persons[2], 2502, new DateTime(2023, 09, 25), DateTime.Today, VehicleStatuses.Available));
 		}
-
-		/* * Todo:
-		 * RentVehicle/Rent metod
-		 * ReturnVehicle/Return metod
-		 * 
-		 * Get-Persons-Bookings-Vehicles får inte finnas. Måste vara generiska. En Get metod där man skickar in ett lambda uttryck i parantesen för att filtrera data
-		 * t.ex Hämta alla personer vars namn är John eller hämta alla bilar med en viss vehicletype
-		 * Get metoden ska hämta en lista på allt som matchar.
-		 * Single metod ska hämta EN sak (t.ex person via personnr eller en bil via regnr)
-		 * 
-		 * en Add metod där man kan lägga till person/bokning/fordon
-		 * 
-		 * Get - returnerar lista med lambda uttryck (filter)
-		 * Single - returnerar EN sak med lambra uttryck (filter)
-		 * Add - lägger till valfri (person, bil, booking) 
-		*/
-
-/*
-		public IEnumerable<IPerson> GetPersons() => _persons;
-		public IEnumerable<IBooking> GetBookings() => _bookings;
-		public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => 
-			status == default ? _vehicles : _vehicles.Where(a => a.VehicleStatuses == status);
-		public void AddNewVehicle(IVehicle v)
-		{
-			_vehicles.Add(v);
-		}
-		public void AddNewCustomer(IPerson v)
-		{
-			_persons.Add(v);
-		}
-*/
-
 	}
 }

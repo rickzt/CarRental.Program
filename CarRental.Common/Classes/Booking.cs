@@ -52,7 +52,10 @@ namespace CarRental.Common.Classes
 		public string? GetCost()
 		{
             var daysRented = DateRented.Duration(DateReturned);
-            //var daysRented = (DateReturned-DateRented)?.TotalDays;
+            if (daysRented < 1)
+            {
+                daysRented = 1;
+            }
 			var kmDriven = (OdometerReturn - OdometerRent);
 			var totalCost = (CostDay * daysRented) + (CostKm * kmDriven);
             return totalCost?.ToString(totalCost % 1 == 0 ? "C0" : "C1", CultureInfo.CreateSpecificCulture("en-US"));

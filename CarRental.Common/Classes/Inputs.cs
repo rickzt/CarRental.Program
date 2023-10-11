@@ -11,7 +11,6 @@ namespace CarRental.Common.Classes;
 
 public class Inputs
 {
-
 	public int? customerId { get; set; }
 	public double? Distance { get; set; }
 	public bool Rented { get; set; } = false;
@@ -30,6 +29,7 @@ public class Inputs
 
 	public string Testmessage { get; set; } = string.Empty;
 	public string ErrorMessage { get; set; } = string.Empty;
+	public bool IsProcessing { get; set; }
 
 
 
@@ -100,9 +100,14 @@ public class Inputs
 		Ssn = null;
 		FirstName = string.Empty;
 		LastName = string.Empty;
+		Distance = null;
 	}
 	public void RentedStatus()
 	{
 		Rented = true;
+	}
+	public void NullDistance()
+	{
+		Distance = null;
 	}
 }

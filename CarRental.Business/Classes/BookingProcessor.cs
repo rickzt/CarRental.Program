@@ -18,6 +18,8 @@ namespace CarRental.Business.Classes
     public class BookingProcessor
     {
         private readonly IData _db;
+        public bool IsProcessing { get; set; } = false;
+        public string exceptionMessage = string.Empty;
 
 		public BookingProcessor(IData db)
         {
@@ -25,43 +27,80 @@ namespace CarRental.Business.Classes
         }
         public IEnumerable<Vehicle> GetVehicles(VehicleStatuses status = default)
         {
+            try
+            {
             if (status == default)
             {
 			    return _db.Get<Vehicle>(null); 
             }
             else
                 return _db.Get<Vehicle>(a => a.VehicleStatuses == status);
-            //return _db.GetVehicles(status);
+
+            }
+            catch (Exception ex)
+            { 
+                exceptionMessage = ex.Message;
+                return default;
+            }
 		}
         public IEnumerable<Customer> GetCustomers()
 		{
+            try
+            {
 			var customerList = _db.Get<IPerson>(null).Cast<Customer>().ToList();
 			return customerList;
+            }
+            catch (Exception ex)
+            {
+				exceptionMessage = ex.Message;
+				return default;
+			}
 		}
 		public IEnumerable<IBooking> GetBookings()
         {
+            try
+            {
             return _db.Get<IBooking>(null);
-            //return _db.GetBookings();
+            }
+			catch (Exception ex)
+			{
+				exceptionMessage = ex.Message;
+				return default;
+			}
 		}
-/*        public async Task<IBooking> RentVehicleASYNC(int vehicleId, int customerId)
-         {
-            _db.RentVehicle(vehicleId, customerId);
-            await Task.Delay(10000);
-            return default;
-         }*/
-		public IBooking RentVehicle(int vehicleId, int customerId)
-		{
-
+        public async Task<IBooking>? RentVehicleASYNC(int vehicleId, int customerId)
+        {
+            try
+            {
+			IsProcessing = true;
+			await Task.Delay(10000);
+            IsProcessing = false;
 			return _db.RentVehicle(vehicleId, customerId);
+            }
+			catch (Exception ex)
+			{
+				exceptionMessage = ex.Message;
+				return default;
+			}
 		}
 		public IBooking ReturnVehicle(int vehicleId, double? distance)
         {
-            var distRounded = Math.Ceiling((decimal)distance);
+            try
+            {
+			var distRounded = Math.Ceiling((decimal)distance);
 		    return _db.ReturnVehicle(vehicleId, (double)distRounded);       
+            }
+			catch (Exception ex)
+			{
+				exceptionMessage = ex.Message;
+				return default;
+			}
         }
         public void AddVehicle(Inputs input, Vehicle? vehicle)
         {
-            vehicle = input.AddNewVehicle();
+            try
+            {
+			vehicle = input.AddNewVehicle();
             if (vehicle != null)
             {
                 vehicle.SetId(_db.NextVehicleId);
@@ -70,18 +109,30 @@ namespace CarRental.Business.Classes
             }
             else
                 input.NullButtons();
+            }
+			catch (Exception ex)
+			{
+				exceptionMessage = ex.Message;
+			}
         }
         public void AddCustomer(Inputs input, IPerson? person)
         {
-            person = input.AddNewCustomer();
-            if (person != null)
+            try
             {
-                person.Id = _db.NextPersonId;
-                _db.Add(person);
-                input.NullButtons();
+			    person = input.AddNewCustomer();
+                if (person != null)
+                {
+                    person.Id = _db.NextPersonId;
+                    _db.Add(person);
+                    input.NullButtons();
+                }
+                else
+                    input.NullButtons();
             }
-            else
-                input.NullButtons();
+			catch (Exception ex)
+			{
+				exceptionMessage = ex.Message;
+			}
 		}
 		// ------------ // Används ej 
 		public Vehicle? GetVehicle(int vehicleId)
@@ -100,27 +151,5 @@ namespace CarRental.Business.Classes
         {
             return _db.Single<IBooking>(v => v.Id == vehicleId);
         }
-
-
-
-
-
-
-		/* Metoder som ska finnas i bp - troligtvis med lambda uttryck
-         * 
-         * (x)IENumerable<IBooking> GetBookings()
-         * (x)IBooking GetBooking(int vehicleId) - Finns inte i PDF'en
-         * (x) IEnumerable<Customer> GetCustomers()
-         * (x)IPerson? GetPerson(string ssn)
-         * (x)IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default)
-         * (x)IVehicle? GetVehicle(int vehicleId)
-         * (x)IVehicle? GetVehicle(string regNo)
-         * async Task<IBooking> RentVehicle(int vehicleId, int customerId)
-         * {
-         * }
-         * (x)IBooking ReturnVehicle(int vehicleId, double distance) 
-         * (x)void AddVehicle(string make, string regNo, double odometer, double costkm, vehiclestatuses status, vehicletypes type)
-         * (x)void AddCustomer(string ssn, string firstname, string lastname)
-         */
 	}
 }
