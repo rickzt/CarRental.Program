@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CarRental.Common.Enums;
 
-public enum BookingStatuses
+/*public enum BookingStatuses
 {
     Open = 1,
     Closed = 2,
-}
+}*/

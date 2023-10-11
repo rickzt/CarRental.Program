@@ -26,10 +26,7 @@ public class Inputs
 	public int? Ssn { get; set; }
 	public string? FirstName { get; set; } = string.Empty;
 	public string? LastName { get; set; } = string.Empty;
-
-	public string Testmessage { get; set; } = string.Empty;
 	public string ErrorMessage { get; set; } = string.Empty;
-	public bool IsProcessing { get; set; }
 
 
 
@@ -48,16 +45,14 @@ public class Inputs
 			{
 				if (VehicleType == VehicleTypes.Motorcycle)
 				{
-					// FIXA ID!! och cost/day - Lägg till null id?
-					var vehicle = new Motorcycle(null, RegNo, Make, Odometer, (double)CostKm, 150, VehicleStatuses);
+					var vehicle = new Motorcycle(null, RegNo, Make, Odometer, (double)CostKm, CostDay, VehicleStatuses);
 					RegNo = string.Empty; Make = string.Empty; Odometer = null; CostKm = null; VehicleType = null;
 					ErrorMessage = string.Empty;
 					return vehicle;
 				}
 				else
 				{
-					// FIXA ID!! och cost/day
-					var vehicle = new Car(null, RegNo, Make, (int)Odometer, (double)CostKm, (VehicleTypes)VehicleType, 150, VehicleStatuses);
+					var vehicle = new Car(null, RegNo, Make, (int)Odometer, (double)CostKm, (VehicleTypes)VehicleType, CostDay, VehicleStatuses);
 					RegNo = string.Empty; Make = string.Empty; Odometer = null; CostKm = null; VehicleType = null;
 					ErrorMessage = string.Empty;
 					return vehicle;
@@ -65,11 +60,11 @@ public class Inputs
 
 			}
 		}
-		catch (Exception ex) 
+		catch (Exception ex)
 		{
 			ErrorMessage = ex.Message;
 			return default;
-			
+
 		}
 	}
 	public IPerson? AddNewCustomer()
@@ -83,7 +78,7 @@ public class Inputs
 			var customer = new Customer(Ssn, FirstName, LastName);
 			return customer;
 		}
-		catch (Exception ex) 
+		catch (Exception ex)
 		{
 			ErrorMessage = ex.Message;
 			return default;
@@ -105,9 +100,5 @@ public class Inputs
 	public void RentedStatus()
 	{
 		Rented = true;
-	}
-	public void NullDistance()
-	{
-		Distance = null;
 	}
 }

@@ -22,15 +22,11 @@
 			Something went wrong: @bp.exceptionMessage
 		</div>
 	</p>
-
-	<p>@input.Testmessage</p>
 }
 @if(input.ErrorMessage.Length > 0)
 {
 <p><div class="w25 alert alert-danger" role="alert">
   @input.ErrorMessage</div></p>
-
-<p>@input.Testmessage</p>
 }
 <br />
 <p>Vehicles</p>
@@ -157,7 +153,7 @@
 			<tr>
 				<td><input placeholder="SSN" type="number" @bind="input.Ssn" /></td>
 				<td><input placeholder="First name" @bind="input.FirstName" /></td>
-				<td><input class="w75" placeholder="Last name" @bind="input.LastName" />   <span><button button type="button" class="btn btn-primary btn-sm" @onclick="(()=>bp.AddCustomer(input, default))">+</button></span></td>
+				<td><input class="w75" placeholder="Last name" @bind="input.LastName"/><span><button button type="button" class="btn btn-primary btn-sm" @onclick="(()=>bp.AddCustomer(input, default))">+</button></span></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -176,9 +172,4 @@
 
 @code 
 {
-	// Finns en todo i bookingprocessor också
-
-	 //* Exceptions vartdå? (bp, collectiondata?)
-
-
 }

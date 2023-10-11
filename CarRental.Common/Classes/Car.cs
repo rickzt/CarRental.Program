@@ -31,7 +31,7 @@ public class Car : Vehicle
 		this.CostDay = costDay;
 		this.VehicleStatuses = vehicleStatuses;
 	}
-	public Car(int? id, IVehicle car)
+	public Car(int? id, Vehicle car)
 	{
         SetId(id);
         this.RegNr = car.RegNr;

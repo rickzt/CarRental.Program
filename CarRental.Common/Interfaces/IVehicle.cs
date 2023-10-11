@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CarRental.Common.Interfaces;
 
-public interface IVehicle
+/*public interface IVehicle // Används ej längre
 {
 	int Id { get; }
 	string RegNr { get; init; }
@@ -20,4 +20,4 @@ public interface IVehicle
 
     public VehicleTypes GetVehicleTypes();
 
-}
+}*/

@@ -21,7 +21,6 @@ public interface IBooking
 	 DateTime? DateReturned { get; set; }
 	 double? CostDay { get; set; }
 	 double? CostKm { get; set; }
-    //VehicleStatuses RentedStatus { get; set; }
     VehicleStatuses VehicleStatus { get; set; }
 	string? GetCost();
 
