@@ -18,7 +18,6 @@ namespace CarRental.Common.Classes
         public DateTime? DateReturned {  get; set; }
         public double? CostDay { get; set; }
 		public double? CostKm { get; set; }
-        //public VehicleStatuses RentedStatus { get; set; }
         public VehicleStatuses VehicleStatus { get; set; }
 
 
@@ -27,7 +26,7 @@ namespace CarRental.Common.Classes
             this.RegNr = vehicle.RegNr;
             this.Customer = customer;
             this.OdometerRent = vehicle.Odometer;
-            this.OdometerReturn = odometerReturned; // lägg in info som sätter nya odometer efter return.
+            this.OdometerReturn = odometerReturned; 
             this.DateRented = dateRented;
             this.DateReturned = dateReturned;
             this.VehicleStatus = rentedStatus;
@@ -42,7 +41,7 @@ namespace CarRental.Common.Classes
             this.RegNr = vehicle.RegNr;
 			this.Customer = customer;
 			this.OdometerRent = vehicle.Odometer;
-			this.OdometerReturn = odometerReturned; // lägg in info som sätter nya odometer efter return.
+			this.OdometerReturn = odometerReturned;
 			this.DateRented = dateRented;
 			this.DateReturned = dateReturned;
 			this.VehicleStatus = rentedStatus;

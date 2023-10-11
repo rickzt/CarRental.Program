@@ -20,7 +20,6 @@ public class Car : Vehicle
 		this.CostDay = costDay;
 		this.VehicleStatuses = vehicleStatuses;
 	}
-	// utan ID
 	public Car(string regNr, string maker, int? odometer, double? costKm, VehicleTypes vechicleTypes, int? costDay, VehicleStatuses vehicleStatuses)
 	{
 		this.RegNr = regNr;
