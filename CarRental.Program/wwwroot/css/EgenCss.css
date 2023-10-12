@@ -62,3 +62,12 @@
 .input-min125 {
     min-width: 125px !important;
 }
+.input-min150 {
+    min-width: 150px !important;
+}
+.hinputpx{
+    height: 30px !important;
+}
+.inputpadding{
+    padding: 0.25rem !important;
+}

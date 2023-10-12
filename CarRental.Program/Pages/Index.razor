@@ -47,17 +47,17 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td class="w13"><input class="w50 form-control" disabled=@bp.IsProcessing placeholder="RegNo" @bind="input.RegNo" /></td>
-				<td class="w13"><input class="w50 form-control" disabled=@bp.IsProcessing placeholder="Make" @bind="input.Make" /></td>
-				<td class="w18"><input class="w50 input-min125 form-control" disabled=@bp.IsProcessing placeholder="Odometer" type="number" @bind="input.Odometer" /></td>
-				<td class="w13"><input class="w50 form-control" disabled=@bp.IsProcessing placeholder="$/Km" type="number" @bind="input.CostKm" /></td>
+				<td class="w13"><input class="w50 form-control hinputpx" disabled=@bp.IsProcessing placeholder="RegNo" @bind="input.RegNo" /></td>
+				<td class="w13"><input class="w50 form-control hinputpx" disabled=@bp.IsProcessing placeholder="Make" @bind="input.Make" /></td>
+				<td class="w18"><input class="w50 input-min125 form-control hinputpx" disabled=@bp.IsProcessing placeholder="Odometer" type="number" @bind="input.Odometer" /></td>
+				<td class="w13"><input class="w50 form-control hinputpx" disabled=@bp.IsProcessing placeholder="$/Km" type="number" @bind="input.CostKm" /></td>
 				<td class="w50">
-					<select class="form-control" disabled=@bp.IsProcessing @bind="input.VehicleType">
+					<select class="form-control hinputpx input-min125 inputpadding align-middle" disabled=@bp.IsProcessing @bind="input.VehicleType">
 					<option value="" disabled selected hidden>Choose type</option>
 					@foreach(var vt in Enum.GetNames(typeof(VehicleTypes))){<option value="@vt">@vt</option>}
 				</select>
 				</td>
-				<td class="w100"><input class="w100 input-min100 form-control" disabled=@bp.IsProcessing placeholder="$/Day" type="number" @bind="input.CostDay" /></td>
+				<td class="w100"><input class="w100 input-min100 form-control hinputpx" disabled=@bp.IsProcessing placeholder="$/Day" type="number" @bind="input.CostDay" /></td>
 				<td class="align-middle"><button type="button" class="btn btn-sm btn-outline-primary" disabled=@bp.IsProcessing @onclick="(()=>bp.AddVehicle(input, default))">Add</button></td>
 				<td class="align-middle"></td>
 				@if (bp.IsProcessing)
@@ -78,7 +78,7 @@
 					@if (v.VehicleStatuses == VehicleStatuses.Available)
 					{
 					<td class="align-middle">
-							<select disabled=@bp.IsProcessing @bind="v.TempCustomerId">
+							<select class="form-control hinputpx input-min150 inputpadding align-middle" disabled=@bp.IsProcessing @bind="v.TempCustomerId">
 							<option value="Test" disabled selected hidden></option>
 							@foreach (var customer in bp.GetCustomers())
 							{
@@ -95,7 +95,7 @@
 					}
 					else
 					{
-						<td><input class="form-control" placeholder="Distance" type="number" disabled=@bp.IsProcessing inputmode="numeric" size="15" @bind="input.Distance" /></td>
+						<td><input class="form-control hinputpx input-min125 inputpadding align-middle" placeholder="Distance" type="number" disabled=@bp.IsProcessing inputmode="numeric" size="15" @bind="input.Distance" /></td>
 						<td class="align-middle"><button size="15" type="button" disabled=@bp.IsProcessing class="btn btn-sm btn-outline-primary" @onclick="(()=>{bp.ReturnVehicle((int)v.Id,input.Distance ?? 0); input.Distance = null;})">Return</button></td>
 					}
 					<td class="align-middle"><span class="badge bg-@((v.VehicleStatuses == VehicleStatuses.Available) ? "primary" : "danger")">@v.VehicleStatuses</span></td>
