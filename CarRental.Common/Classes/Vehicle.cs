@@ -17,6 +17,7 @@ abstract public class Vehicle
     public double? CostKm { get; set; }
     public VehicleTypes VehicleTypes { get; set; }
     public VehicleStatuses VehicleStatuses { get; set; }
+    public int? TempCustomerId {get; set; }
     public VehicleTypes GetVehicleTypes()
     { return VehicleTypes; }
     public void SetId(int? id)

@@ -16,16 +16,6 @@ public class Motorcycle : Vehicle
 		this.CostDay = costDay;
 		this.VehicleStatuses = vehicleStatuses;
 		this.VehicleTypes = VehicleTypes.Motorcycle;
-	}
-	public Motorcycle(int id, Vehicle motorcycle)
-	{
-        SetId(id);
-        this.RegNr = motorcycle.RegNr;
-		this.Maker = motorcycle.Maker;
-		this.Odometer = motorcycle.Odometer;
-		this.CostKm = motorcycle.CostKm;
-		this.CostDay = motorcycle.CostDay;
-		this.VehicleStatuses = motorcycle.VehicleStatuses;
-		this.VehicleTypes = VehicleTypes.Motorcycle;
+		this.TempCustomerId = null;
 	}
 }

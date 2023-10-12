@@ -77,18 +77,18 @@
 					<td>$@v.CostDay</td>
 					@if (v.VehicleStatuses == VehicleStatuses.Available)
 					{
-						<td class="align-middle">
-							<select disabled=@bp.IsProcessing @bind="input.customerId">
+					<td class="align-middle">
+							<select disabled=@bp.IsProcessing @bind="v.TempCustomerId">
 							<option value="Test" disabled selected hidden></option>
 							@foreach (var customer in bp.GetCustomers())
 							{
-								<option value="@customer.Id">@customer.FirstName @customer.LastName</option>
+									<option value="@customer.Id">@customer.FirstName @customer.LastName</option>
 							}
 						</select>
 					</td>
-						@if (input.customerId != null)
+						@if (v.TempCustomerId != null)
 						{
-							<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="@( async () => { await bp.RentVehicleASYNC((int)v.Id, (int)input.customerId); input.Distance = null; } )" disabled=@bp.IsProcessing>Rent</button></td>
+							<td><button type="button" class="btn btn-sm btn-outline-primary" @onclick="@( async () => { await bp.RentVehicleASYNC((int)v.Id, (int)v.TempCustomerId); input.Distance = null; } )" disabled=@bp.IsProcessing>Rent</button></td>
 						}
 						else
 						{<td><button type="button" class="btn btn-sm btn-outline-primary" disabled>Rent</button></td>}
@@ -172,4 +172,5 @@
 
 @code 
 {
+	// Lägg till tempperson id i motorcycle/car och binda den i customer
 }

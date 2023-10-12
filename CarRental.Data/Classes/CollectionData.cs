@@ -23,91 +23,33 @@ namespace CarRental.Data.Classes
 
 		public List<T> Get<T>(Expression<Func<T, bool>> expression)
 		{
-			try
-			{
-				FieldInfo[] fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-
-				foreach (var field in fields)
-				{
-					if (field.FieldType == typeof(List<T>))
-					{
-						var list = (List<T>)field.GetValue(this);
-						if (list != null)
-						{
-							if (expression == null || expression == default)
-							{
-								return list;
-							}
-							else
-							return list.Where(expression.Compile()).ToList();
-						}
-					}
-				}
-				throw new Exception();
-
-			}
-			catch (Exception)
-			{
-				throw new Exception();
-			}
+		var list = GetListReflection<T>();
+		if (expression == null || expression == default) return list;
+		else return list.Where(expression.Compile()).ToList();
 		}
 		public T? Single<T>(Expression<Func<T, bool>> expression)
 		{
-			try
-			{
-				FieldInfo[] fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-
-				foreach (var field in fields)
-				{
-					if (field.FieldType == typeof(List<T>))
-					{
-						var list = (List<T>)field.GetValue(this);
-						if (list != null)
-						{
-							if (expression == null || expression == default)
-							{
-								throw new ArgumentNullException(field.Name);
-							}
-							else
-								return list.Single(expression.Compile());
-						}
-						throw new ArgumentNullException(field.Name);
-					}
-				}
-				throw new Exception();
-
-			}
-			catch (Exception)
-			{
-				throw new Exception();
-			}
+			var list = GetListReflection<T>();
+			if (expression == null || expression == default) throw new ArgumentNullException("No expression found");
+			else return list.Single(expression.Compile());
 		}
 		public void Add<T>(T item)
+		{
+			var list = GetListReflection<T>();
+			if (item == null) throw new ArgumentNullException();
+			list?.Add(item);
+		}
+		private List<T>? GetListReflection<T>()
 		{
 			try
 			{
 				FieldInfo[] fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-
-				foreach (var field in fields)
-				{
-					if (field.FieldType == typeof(List<T>))
-					{
-						var list = (List<T>)field.GetValue(this);
-						if (list != null)
-						{
-							if (item == null)
-							{
-								throw new ArgumentNullException(field.Name);
-							}
-								list.Add(item);
-							break;
-						}
-					}
-				}
+				var list = fields.SingleOrDefault(f => f.FieldType == typeof(List<T>))?.GetValue(this) as List<T>;
+				return list;
 			}
-			catch (Exception ex)
+			catch
 			{
-				throw new Exception();
+				throw;
 			}
 		}
 

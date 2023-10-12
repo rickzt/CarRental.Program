@@ -1,5 +1,6 @@
 ﻿using CarRental.Common.Enums;
 using CarRental.Common.Interfaces;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,4 +102,12 @@ public class Inputs
 	{
 		Rented = true;
 	}
+/*	public void SelectClient(ChangeEventArgs e)
+	{
+		if (e.Value != null) return;
+		if (int.TryParse(e.ToString(), out int result));
+		customerId = result;
+
+		//customer => customer.id = result
+	}*/
 }
